@@ -2,15 +2,20 @@
 title: "What is Reservoir Computing?"
 ---
 
-Imagine you have a pool of water and you throw a stone into it. The stone creates ripples. If you throw another stone before the first ripples die out, the new ripples interfere with the old ones. If you keep doing this, the surface of the water starts to carry a short history of what has happened to it.
+Imagine you have a pool of water and you throw a stone into it. The stone creates ripples. If you throw another stone before 
+the first ripples die out, the new ripples interfere with the old ones. If you keep doing this, the surface of the water
+ starts to carry a short history of what has happened to it.
 
-That is the important part: the pool does not just react to the latest stone. Its current state also depends on the stones that came before.
+That is the important part: the pool does not just react to the latest stone. Its current state also depends on the stones 
+that came before.
 
-Now imagine you could observe the ripples carefully enough. Maybe the pattern on the surface could tell you something about the sequence of stones: how many were thrown, how far apart they were, or how strongly they disturbed the water. In a playful version of this idea, you might even imagine shaping the pool so the ripples bounce around in useful or surprising ways. This analogy is inspired by [this video demonstration](https://youtu.be/cDxtFtoQVNc?si=wlvcpeV8bFFeDFer).
+Now imagine you could observe the ripples carefully enough. Maybe the pattern on the surface could tell you something 
+about the sequence of stones: how many were thrown, how far apart they were, or how strongly they disturbed the water. 
+In a playful version of this idea, you might even imagine shaping the pool so the ripples bounce around in useful or 
+surprising ways. This analogy is inspired by [this video demonstration](https://youtu.be/cDxtFtoQVNc?si=wlvcpeV8bFFeDFer).
 
 Reservoir computing starts from a similar intuition. We take a dynamical system, drive it with an input signal, 
-observe how its internal state changes, and then learn a simple mapping from those observed states to a useful output. 
-This analogy is inspired by [this video demonstration](https://youtu.be/cDxtFtoQVNc?si=wlvcpeV8bFFeDFer).
+observe how its internal state changes, and then learn a simple mapping from those observed states to a useful output.
 
 ## The Reservoir Idea
 
