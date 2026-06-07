@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="A general-audience introduction to reservoir computing, from ripples in water to fixed recurrent systems and trained readouts.">
 
 <title>What is Reservoir Computing? – The Curious Notebook</title>
 <style>
@@ -285,8 +286,16 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-reservoir-idea" id="toc-the-reservoir-idea" class="nav-link active" data-scroll-target="#the-reservoir-idea">The Reservoir Idea</a></li>
+  <li><a href="#a-more-technical-view" id="toc-a-more-technical-view" class="nav-link" data-scroll-target="#a-more-technical-view">A More Technical View</a></li>
+  <li><a href="#why-this-can-be-useful" id="toc-why-this-can-be-useful" class="nav-link" data-scroll-target="#why-this-can-be-useful">Why This Can Be Useful</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -297,6 +306,11 @@ ul.task-list li input[type="checkbox"] {
 <h1 class="title">What is Reservoir Computing?</h1>
 </div>
 
+<div>
+  <div class="description">
+    A general-audience introduction to reservoir computing, from ripples in water to fixed recurrent systems and trained readouts.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -311,9 +325,43 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Imagine you have a pool of water and you throw a stone in to it. This will create ripples in the pool, right? Now if you throw in another stone before these ripples die out, the ripples created by the current stone will interfere with the earlier ones. If you keep throwing stones into this https://youtu.be/cDxtFtoQVNc?si=wlvcpeV8bFFeDFer</p>
+<p>Imagine you have a pool of water and you throw a stone into it. The stone creates ripples. If you throw another stone before the first ripples die out, the new ripples interfere with the old ones. If you keep doing this, the surface of the water starts to carry a short history of what has happened to it.</p>
+<p>That is the important part: the pool does not just react to the latest stone. Its current state also depends on the stones that came before.</p>
+<p>Now imagine you could observe the ripples carefully enough. Maybe the pattern on the surface could tell you something about the sequence of stones: how many were thrown, how far apart they were, or how strongly they disturbed the water. In a playful version of this idea, you might even imagine shaping the pool so the ripples bounce around in useful or surprising ways. This analogy is inspired by <a href="https://youtu.be/cDxtFtoQVNc?si=wlvcpeV8bFFeDFer">this video demonstration</a>.</p>
+<p>Reservoir computing starts from a similar intuition. We take a dynamical system, drive it with an input signal, observe how its internal state changes, and then learn a simple mapping from those observed states to a useful output. This analogy is inspired by <a href="https://youtu.be/cDxtFtoQVNc?si=wlvcpeV8bFFeDFer">this video demonstration</a>.</p>
+<section id="the-reservoir-idea" class="level2">
+<h2 class="anchored" data-anchor-id="the-reservoir-idea">The Reservoir Idea</h2>
+<p>In machine learning terms, reservoir computing is a framework for processing time-varying data. It is especially useful when the order of inputs matters, such as signals, sensor readings, speech, motion, or any sequence where the past can influence the present.</p>
+<p>The “reservoir” is usually a recurrent system. In a common software version, this reservoir is a network of units connected to one another, including connections that loop back through time. These recurrent connections let the system develop memory: not perfect memory, but a fading trace of recent inputs.</p>
+<p>The unusual part is that the reservoir itself is not usually trained. Its internal connections are often chosen randomly and then kept fixed. The input signal is fed into this fixed system, and the reservoir produces a rich, changing pattern of activity.</p>
+<p>Instead of adjusting all the internal connections, reservoir computing trains only a final output layer. This final layer is often called the <strong>readout</strong>.</p>
+</section>
+<section id="a-more-technical-view" class="level2">
+<h2 class="anchored" data-anchor-id="a-more-technical-view">A More Technical View</h2>
+<p>At each time step, the reservoir receives an input. Its internal state updates based on three things:</p>
+<ul>
+<li>the current input,</li>
+<li>the previous reservoir state,</li>
+<li>the fixed internal connections of the reservoir.</li>
+</ul>
+<p>Because the reservoir has recurrent connections, its state can depend on recent history. Because the units are often nonlinear, the reservoir can transform the input into a more expressive representation.</p>
+<p>The readout then learns how to combine these reservoir states to produce the desired output. This is usually done with a relatively simple regression method, such as linear regression or ridge regression.</p>
+<p>So the training problem becomes much smaller than training a full recurrent neural network. We are not asking the whole system to learn from scratch. We are asking a fixed dynamic system to create useful features, and then training a readout to use those features.</p>
+</section>
+<section id="why-this-can-be-useful" class="level2">
+<h2 class="anchored" data-anchor-id="why-this-can-be-useful">Why This Can Be Useful</h2>
+<p>Reservoir computing is useful because it separates two jobs.</p>
+<p>The reservoir handles dynamics, memory, and nonlinear transformation. The readout handles learning the specific task. This can make training faster and simpler than training every connection in a recurrent neural network.</p>
+<p>It is also useful because the reservoir does not have to be a conventional neural network. In principle, any suitable dynamical system could act as a reservoir if it has enough memory, nonlinearity, and observable state. This is where the idea connects to physical reservoir computing: a physical system, or a simulated physical system, might transform input signals through its own natural dynamics.</p>
+<p>That does not mean every complex-looking system is a good reservoir. A useful reservoir should preserve enough information about recent inputs, transform that information in helpful ways, and allow a readout to learn a task reliably. These are things we have to test, not assume.</p>
+<p>For this notebook, reservoir computing is interesting because it gives us a careful way to ask a curious question:</p>
+<blockquote class="blockquote">
+<p>Can the dynamics of a system become part of the computation?</p>
+</blockquote>
+<p>The rest of this module explores that question through toy models, simulations, and small experiments.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
