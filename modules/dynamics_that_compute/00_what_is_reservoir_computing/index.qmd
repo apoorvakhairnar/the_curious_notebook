@@ -1,6 +1,5 @@
 ---
 title: "What is Reservoir Computing?"
-description: "A general-audience introduction to reservoir computing, from ripples in water to fixed recurrent systems and trained readouts."
 ---
 
 Imagine you have a pool of water and you throw a stone into it. The stone creates ripples. If you throw another stone before the first ripples die out, the new ripples interfere with the old ones. If you keep doing this, the surface of the water starts to carry a short history of what has happened to it.
