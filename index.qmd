@@ -1,0 +1,30 @@
+---
+title: "The Curious Notebook"
+---
+
+Welcome to **The Curious Notebook** — a space for simulations, notes, and small technical explorations.
+
+I use this site to build intuition around ideas in robotics, machine learning, dynamics, and physical computation. 
+Some pages are polished explainers. Others are working notes or toy models that help me understand an idea more clearly.
+
+## Explore
+
+::: {.grid .feature-grid}
+
+::: {.g-col-12 .g-col-md-6}
+::: {.feature-card}
+### [Dynamics That Compute](modules/dynamics_that_compute/)
+
+Toy simulations of physical systems that may act as reservoirs for computation.
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6}
+::: {.feature-card}
+### [Posts](posts/)
+
+Short notes, build logs, and standalone explanations.
+:::
+:::
+
+:::

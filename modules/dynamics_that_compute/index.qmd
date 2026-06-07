@@ -1,0 +1,39 @@
+---
+title: "Dynamics That Compute"
+description: "Toy simulations of physical systems that may act as reservoirs for computation."
+page-layout: full
+listing:
+  id: entries
+  contents:
+    - "*/index.qmd"
+  type: grid
+  sort: "title"
+  fields: [title, description]
+---
+
+**Dynamics That Compute** explores a simple idea:
+
+> A physical system can sometimes transform information through its own dynamics.
+
+A soft structure bends.  
+A network vibrates.  
+An oscillator shifts phase.  
+A material stores and releases energy.  
+
+In reservoir computing, these responses are not just complications. They can become useful features.
+
+## Current entries
+
+::: {#entries}
+:::
+
+## What each entry asks
+
+Each simulation asks:
+
+- What is the physical system?
+- What is the input?
+- What states can be observed?
+- What kind of memory or nonlinearity appears?
+- What can a simple readout learn?
+- Where does the toy model break down?

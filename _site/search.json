@@ -1,0 +1,81 @@
+[
+  {
+    "objectID": "posts/index.html",
+    "href": "posts/index.html",
+    "title": "Posts",
+    "section": "",
+    "text": "Posts will appear here once they are ready to publish. For now, the notebook is focused on the active modules and core site pages."
+  },
+  {
+    "objectID": "posts/index.html#no-posts-yet",
+    "href": "posts/index.html#no-posts-yet",
+    "title": "Posts",
+    "section": "",
+    "text": "Posts will appear here once they are ready to publish. For now, the notebook is focused on the active modules and core site pages."
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html",
+    "href": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html",
+    "title": "What is Reservoir Computing?",
+    "section": "",
+    "text": "Imagine you have a pool of water and you throw a stone in to it. This will create ripples in the pool, right? Now if you throw in another stone before these ripples die out, the ripples created by the current stone will interfere with the earlier ones. If you keep throwing stones into this https://youtu.be/cDxtFtoQVNc?si=wlvcpeV8bFFeDFer"
+  },
+  {
+    "objectID": "modules/index.html",
+    "href": "modules/index.html",
+    "title": "Modules",
+    "section": "",
+    "text": "Dynamics That Compute\nToy simulations and notes on physical systems that transform information through their dynamics.\nActive Module"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "The Curious Notebook",
+    "section": "",
+    "text": "Welcome to The Curious Notebook — a space for simulations, notes, and small technical explorations.\nI use this site to build intuition around ideas in robotics, machine learning, dynamics, and physical computation. Some pages are polished explainers. Others are working notes or toy models that help me understand an idea more clearly."
+  },
+  {
+    "objectID": "index.html#explore",
+    "href": "index.html#explore",
+    "title": "The Curious Notebook",
+    "section": "Explore",
+    "text": "Explore\n\n\n\nDynamics That Compute\nToy simulations of physical systems that may act as reservoirs for computation.\n\n\n\n\nPosts\nShort notes, build logs, and standalone explanations."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "Hi, I’m Apoorva.\nI’m a mechanical engineering PhD student interested in soft robotics, reservoir computing, neuromorphic systems, sensing, and control.\nA lot of my work sits at the intersection of physical systems and computation: how bodies move, how materials respond, how dynamics process information, and how robots can use these ideas to sense and act.\nThe Curious Notebook is where I collect small simulations, technical notes, and ideas I am trying to understand more deeply.\nSome pages are polished. Some are exploratory. The goal is to make the process of understanding visible without pretending every idea is finished."
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/index.html",
+    "href": "modules/dynamics_that_compute/index.html",
+    "title": "Dynamics That Compute",
+    "section": "",
+    "text": "Dynamics That Compute explores a simple idea:\nA soft structure bends.\nA network vibrates.\nAn oscillator shifts phase.\nA material stores and releases energy.\nIn reservoir computing, these responses are not just complications. They can become useful features.",
+    "crumbs": [
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/index.html#current-entries",
+    "href": "modules/dynamics_that_compute/index.html#current-entries",
+    "title": "Dynamics That Compute",
+    "section": "Current entries",
+    "text": "Current entries\n\n\n\n\n\n\n\nCoupled Oscillator Reservoir\n\n\n\n\n\n\n\n\n\n\n\n\nWhat is Reservoir Computing?\n\n\n\n\n\n\n\n\nNo matching items",
+    "crumbs": [
+      "Overview"
+    ]
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/index.html#what-each-entry-asks",
+    "href": "modules/dynamics_that_compute/index.html#what-each-entry-asks",
+    "title": "Dynamics That Compute",
+    "section": "What each entry asks",
+    "text": "What each entry asks\nEach simulation asks:\n\nWhat is the physical system?\nWhat is the input?\nWhat states can be observed?\nWhat kind of memory or nonlinearity appears?\nWhat can a simple readout learn?\nWhere does the toy model break down?",
+    "crumbs": [
+      "Overview"
+    ]
+  }
+]

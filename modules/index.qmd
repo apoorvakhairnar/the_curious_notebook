@@ -1,0 +1,19 @@
+---
+title: "Modules"
+description: "Longer paths through connected ideas."
+page-layout: full
+---
+
+::: {.grid .module-grid}
+
+::: {.g-col-12 .g-col-md-6}
+::: {.module-card}
+### [Dynamics That Compute](dynamics_that_compute/)
+
+Toy simulations and notes on physical systems that transform information through their dynamics.
+
+<span class="status">Active Module</span>
+:::
+:::
+
+:::

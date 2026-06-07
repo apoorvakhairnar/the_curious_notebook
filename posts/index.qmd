@@ -1,0 +1,11 @@
+---
+title: "Posts"
+description: "Short notes, build logs, and standalone explanations."
+page-layout: full
+---
+
+::: {.empty-state}
+## No posts yet
+
+Posts will appear here once they are ready to publish. For now, the notebook is focused on the active modules and core site pages.
+:::

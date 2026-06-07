@@ -1,0 +1,23 @@
+{
+  "index.qmd": {
+    "index.html": "4473e80f"
+  },
+  "about.qmd": {
+    "about.html": "f18f1a64"
+  },
+  "modules/index.qmd": {
+    "index.html": "7cad69b7"
+  },
+  "modules/dynamics_that_compute/index.qmd": {
+    "index.html": "67751c01"
+  },
+  "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.qmd": {
+    "index.html": "dfca728d"
+  },
+  "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.qmd": {
+    "index.html": "6d7d5bdc"
+  },
+  "posts/index.qmd": {
+    "index.html": "c4d2f968"
+  }
+}

@@ -1,0 +1,3 @@
+---
+title: "Coupled Oscillator Reservoir"
+---

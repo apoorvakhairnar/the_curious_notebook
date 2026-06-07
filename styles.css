@@ -1,0 +1,170 @@
+/* The Curious Notebook: calm, readable, and quietly polished. */
+
+:root {
+  --tn-bg-soft: #f7f5ef;
+  --tn-surface: #ffffff;
+  --tn-surface-muted: #f4f7f6;
+  --tn-text: #26302f;
+  --tn-muted: #66736f;
+  --tn-border: #dce3df;
+  --tn-accent: #2f6f73;
+  --tn-accent-soft: #e6f1ef;
+  --tn-link: #245f63;
+  --tn-shadow: 0 14px 36px rgba(38, 48, 47, 0.08);
+}
+
+body {
+  color: var(--tn-text);
+  line-height: 1.68;
+  background:
+    linear-gradient(180deg, var(--tn-bg-soft) 0, #ffffff 280px);
+}
+
+a {
+  color: var(--tn-link);
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  color: #1c4d50;
+}
+
+.navbar {
+  border-bottom: 1px solid rgba(220, 227, 223, 0.9);
+  box-shadow: 0 8px 24px rgba(38, 48, 47, 0.05);
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+#quarto-content {
+  padding-top: 1.2rem;
+}
+
+main.content {
+  font-size: 1.03rem;
+}
+
+main.content h1,
+main.content h2,
+main.content h3 {
+  color: #1f2a29;
+  letter-spacing: 0;
+}
+
+main.content h1 {
+  margin-bottom: 1rem;
+}
+
+main.content h2 {
+  margin-top: 2.2rem;
+  padding-top: 0.35rem;
+}
+
+blockquote {
+  color: #344442;
+  border-left: 4px solid var(--tn-accent);
+  background: var(--tn-accent-soft);
+  border-radius: 0 8px 8px 0;
+  padding: 0.85rem 1rem;
+}
+
+.feature-grid,
+.module-grid {
+  row-gap: 1rem;
+}
+
+.feature-card,
+.module-card,
+.post-card,
+.empty-state {
+  height: 100%;
+  padding: 1.15rem;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid var(--tn-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(38, 48, 47, 0.06);
+}
+
+.feature-card,
+.module-card,
+.post-card {
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+}
+
+.feature-card:hover,
+.module-card:hover,
+.post-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(47, 111, 115, 0.45);
+  box-shadow: var(--tn-shadow);
+}
+
+.feature-card h3,
+.module-card h3,
+.post-card h3,
+.empty-state h2 {
+  margin-top: 0;
+}
+
+.feature-card a,
+.module-card a,
+.post-card a {
+  text-decoration: none;
+}
+
+.feature-card p:last-child,
+.module-card p:last-child,
+.post-card p:last-child,
+.empty-state p:last-child {
+  margin-bottom: 0;
+}
+
+.status {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: var(--tn-accent-soft);
+  color: var(--tn-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.empty-state {
+  max-width: 680px;
+  margin-top: 1.5rem;
+  background: linear-gradient(180deg, #ffffff 0%, var(--tn-surface-muted) 100%);
+}
+
+.empty-state h2 {
+  font-size: 1.35rem;
+}
+
+.empty-state p {
+  color: var(--tn-muted);
+}
+
+.quarto-title-meta {
+  color: var(--tn-muted);
+}
+
+code {
+  color: #304b4d;
+  background-color: #eef4f3;
+  border-radius: 4px;
+}
+
+@media (max-width: 767.98px) {
+  main.content {
+    font-size: 1rem;
+  }
+
+  .feature-card,
+  .module-card,
+  .post-card,
+  .empty-state {
+    padding: 1rem;
+  }
+}

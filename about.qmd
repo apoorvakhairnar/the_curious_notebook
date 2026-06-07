@@ -1,0 +1,17 @@
+---
+title: "About"
+---
+
+Hi, I’m Apoorva.
+
+I’m a mechanical engineering PhD student interested in soft robotics, reservoir computing, neuromorphic systems, sensing, 
+and control.
+
+A lot of my work sits at the intersection of physical systems and computation: how bodies move, how materials respond, 
+how dynamics process information, and how robots can use these ideas to sense and act.
+
+**The Curious Notebook** is where I collect small simulations, technical notes, and ideas I am trying to understand more 
+deeply.
+
+Some pages are polished. Some are exploratory. The goal is to make the process of understanding visible without 
+pretending every idea is finished.
