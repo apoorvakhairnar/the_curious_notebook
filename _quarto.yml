@@ -7,6 +7,7 @@ project:
     - "modules/index.qmd"
     - "modules/dynamics_that_compute/*.qmd"
     - "modules/dynamics_that_compute/**/*.qmd"
+    - "modules/dynamics_that_compute/**/*.ipynb"
     - "posts/*.qmd"
     - "posts/**/*.qmd"
 
