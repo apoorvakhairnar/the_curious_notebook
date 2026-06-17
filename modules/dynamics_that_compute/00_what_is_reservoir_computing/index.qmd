@@ -1,6 +1,6 @@
 ---
 title: "What is Reservoir Computing?"
-description: "An approachable introduction to reservoir computing, readouts, memory, and why dynamical systems can be useful for processing sequences."
+description: ""
 categories:
   - reservoir computing
   - dynamics

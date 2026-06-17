@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="A notebook-derived article exploring oscillator dynamics and coupled oscillators as a possible reservoir-computing toy model.">
 
 <title>Coupled Oscillator Reservoir – The Curious Notebook</title>
 <style>
@@ -450,11 +449,6 @@ window.Quarto = {
   </div>
   </div>
 
-<div>
-  <div class="description">
-    A notebook-derived article exploring oscillator dynamics and coupled oscillators as a possible reservoir-computing toy model.
-  </div>
-</div>
 
 
 <div class="quarto-title-meta">
@@ -484,7 +478,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="the-basic-model">The basic model</h2>
 <p>Here is the first mathematical version of the story. A <strong>harmonic oscillator</strong> describes an ideal oscillator with no damping and no external force pushing on it: <span class="math display">\[\frac{d^2x}{dt^2} + \omega^2 x = 0\]</span> Here, <span class="math inline">\(x\)</span> is the displacement from equilibrium, <span class="math inline">\(t\)</span> is time, and <span class="math inline">\(\omega=\sqrt{\frac{k}{m}}\)</span> is the angular frequency. The solution is sinusoidal motion: the familiar repeating wave we expect from a spring-like system.</p>
 <p>Now let’s make the model a little more realistic by adding damping: <span class="math display">\[\frac{d^2x}{dt^2} + \beta \frac{dx}{dt} + \omega^2 x = 0\]</span> where <span class="math inline">\(\beta\)</span> is the damping coefficient. Depending on this value, the oscillator may keep ringing for a while, return smoothly to rest, or settle as quickly as possible without overshooting.</p>
-<div id="500958c0" class="cell" data-execution_count="1">
+<div id="d4f18ec1" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.integrate <span class="im">import</span> solve_ivp</span>
@@ -536,7 +530,7 @@ window.Quarto = {
 <p>But what if we keep feeding the system an input while it moves? That gives us <strong>forced oscillation</strong>, where an outside signal keeps influencing the oscillator:</p>
 <p><span class="math display">\[\frac{d^2x}{dt^2} + \beta \frac{dx}{dt} + \omega^2 x = f(t)\]</span></p>
 <p>Here, <span class="math inline">\(f(t)\)</span> is the external driving force. You can think of it as the signal we are injecting into the system.</p>
-<div id="c8e4c92c" class="cell" data-execution_count="2">
+<div id="b44e114c" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forced_harmonic_oscillator(t, y, omega, beta, F0, omega_d):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    x, v <span class="op">=</span> y</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    dxdt <span class="op">=</span> v</span>
@@ -578,7 +572,7 @@ window.Quarto = {
 </div>
 <p>The important part is not just that there are two masses. It is that their motions are now linked. If one oscillator is displaced from equilibrium, it can tug on the other and make that one move too. The coupling gives energy and information a path through the system.</p>
 <p>Mathematically, this means the equations have to talk to each other as well. For two coupled oscillators, one simple model is: <span class="math display">\[\frac{d^2x_1}{dt^2} + \beta_1 \frac{dx_1}{dt} + \omega_1^2 x_1 = f_1(t) + c_{12} (x_2 - x_1) \]</span> <span class="math display">\[\frac{d^2x_2}{dt^2} + \beta_2 \frac{dx_2}{dt} + \omega_2^2 x_2 = f_2(t) + c_{12} (x_1 - x_2) \]</span> Here, <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> are the displacements of the two oscillators, <span class="math inline">\(c_{12}\)</span> is the coupling constant, <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> are damping coefficients, <span class="math inline">\(\omega_1\)</span> and <span class="math inline">\(\omega_2\)</span> are natural frequencies, and <span class="math inline">\(f_1(t)\)</span> and <span class="math inline">\(f_2(t)\)</span> are external driving forces. The new piece is the coupling term: each oscillator now feels the other one’s motion.</p>
-<div id="732d16bb" class="cell" data-execution_count="3">
+<div id="91961095" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coupled_oscillators(t, y, k, m, beta, c12, F0_1, F0_2, omega_d_1, omega_d_2):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    x1, v1, x2, v2 <span class="op">=</span> y</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    F1 <span class="op">=</span> F0_1 <span class="op">*</span> np.sin(omega_d_1 <span class="op">*</span> t)</span>
@@ -626,7 +620,7 @@ window.Quarto = {
 <p>If we have <span class="math inline">\(N\)</span> oscillators, each oscillator has its own displacement, damping, natural frequency, input, and connections to the others. One way to write the motion of the <span class="math inline">\(i^{th}\)</span> oscillator is:</p>
 <p><span class="math display">\[\frac{d^2x_i}{dt^2} + \beta_i \frac{dx_i}{dt} + \omega_i^2 x_i = f_i(t) + \sum_{j=1}^{N} c_{ij} (x_j - x_i)\]</span></p>
 <p>Here, <span class="math inline">\(x_i\)</span> is the displacement, <span class="math inline">\(\beta_i\)</span> is the damping coefficient, <span class="math inline">\(\omega_i\)</span> is the natural frequency, <span class="math inline">\(f_i(t)\)</span> is the external driving force, and <span class="math inline">\(c_{ij}\)</span> is the coupling strength between oscillator <span class="math inline">\(i\)</span> and oscillator <span class="math inline">\(j\)</span>. The sum is the important part: it gathers the influence of the rest of the network on oscillator <span class="math inline">\(i\)</span>.</p>
-<div id="4329707c" class="cell" data-execution_count="4">
+<div id="f0cde22c" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coupled_oscillators(t, y, k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="bu">len</span>(y) <span class="op">//</span> <span class="dv">2</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> y[:N]</span>
@@ -681,7 +675,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="scaling-up-the-reservoir">Scaling up the reservoir</h2>
 <p>The previous example was deliberately small and a bit rough: only a few oscillators, with randomly chosen parameters. Now let’s make the setup feel more like a reservoir. We will use more oscillators, choose the parameters more carefully, and drive the system with a shared input signal.</p>
 <p>In this version, the input enters through the first oscillator. The others do not receive it directly; they feel it through the coupling. That is exactly what we want to watch: how does one signal ripple through the system and turn into many different internal responses?</p>
-<div id="a6ecb7e7" class="cell" data-execution_count="5">
+<div id="ad20b701" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> drive_signal(t, omega_d):</span>
@@ -781,7 +775,7 @@ window.Quarto = {
 <section id="how-do-we-do-that" class="level3">
 <h3 class="anchored" data-anchor-id="how-do-we-do-that">How do we do that?</h3>
 <p>We are going to collect the states that is, the displacements of all the oscillators in the system from 0 to 100 seconds. We will use 70% of that data to obtain the mapping from the oscillator states to the input signal, and then we will test how well that mapping works on the remaining 30% of the data. If the reservoir is doing a good job, then we should be able to reconstruct the input signal from the internal states with high accuracy.</p>
-<div id="d3a55a63" class="cell" data-execution_count="6">
+<div id="c584695f" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> r2_score, mean_squared_error</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> __fit__(X_eval, u_eval, train_size, ridge_alpha):</span>
@@ -852,7 +846,7 @@ R^2: 0.989/1.0</code></pre>
 <section id="a-harder-input-signal" class="level2">
 <h2 class="anchored" data-anchor-id="a-harder-input-signal">A harder input signal</h2>
 <p>This time, let’s dirve the first oscillator with an input signal that is a sum of 3 sine waves with different frequencies. This is a more complex signal that contains more information than a single sine wave and also does not repeat.</p>
-<div id="d8a60d8f" class="cell" data-execution_count="7">
+<div id="2594f008" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> drive_signal(t, omega_d):</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> np.asarray(t)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (</span>
@@ -923,7 +917,7 @@ R^2: 0.736/1.0</code></pre>
 <section id="tuning-the-reservoir-response" class="level2">
 <h2 class="anchored" data-anchor-id="tuning-the-reservoir-response">Tuning the reservoir response</h2>
 <p>I am going to increase the coupling strength, the driving force, and the driving frequency, then compare the result.</p>
-<div id="8b63c09e" class="cell" data-execution_count="8">
+<div id="3e58ab24" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> drive_signal(t, omega_d):</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> np.asarray(t)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (</span>
@@ -1022,7 +1016,7 @@ R^2: 0.996/1.0</code></pre>
 <h2 class="anchored" data-anchor-id="testing-memory">Testing memory</h2>
 <p>Here, we follow the same procedure as before, but this time we obtain a mapping from the current oscillator states to the input signal from a few seconds ago.</p>
 <p>I am going to set the delay to 1000 steps, which is about 20 seconds in this simulation. That means the output model will try to reconstruct the input signal from 20 seconds ago, using only the current state of the oscillator network.</p>
-<div id="ee447c66" class="cell" data-execution_count="9">
+<div id="7a9ca812" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Input reconstruction on the tuned reservoir states</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>delay_steps <span class="op">=</span> <span class="dv">1000</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1069,7 +1063,7 @@ R^2: 0.993/1.0</code></pre>
 <section id="how-can-we-predict-the-future" class="level3">
 <h3 class="anchored" data-anchor-id="how-can-we-predict-the-future">How can we predict the future?</h3>
 <p>This is a different task than reconstructing the past. I will first train the output model to predict the input signal 1 step ahead, which is about 20 milliseconds in this simulation. That means the output model will try to predict the input signal at the next time step, using only the current state of the oscillator network.</p>
-<div id="40d867c7" class="cell" data-execution_count="10">
+<div id="128fc571" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Input reconstruction on the tuned reservoir states</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>washout <span class="op">=</span> <span class="dv">200</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>train_fraction <span class="op">=</span> <span class="fl">0.7</span></span>
@@ -1095,7 +1089,7 @@ R^2: 0.993/1.0</code></pre>
 <pre class="text"><code>Task: Future input prediction (steps = 1)
 R^2: 0.997/1.0</code></pre>
 <p>Now that I have a prediction output model, I will use these predicted input values to drive my oscillator network for a few seconds. The question is: how well does the reservoir’s internal state reflect the future input values that it is trying to predict? If the reservoir can capture the dynamics of the input signal, then the predicted future values should be reasonably close to the actual future values, and the internal states should show patterns that correspond to those predictions. Let’s see how it goes!</p>
-<div id="255de9df" class="cell" data-execution_count="11">
+<div id="c449d777" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coupled_oscillators_pred(t, y, k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix, drive_value):</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="bu">len</span>(y) <span class="op">//</span> <span class="dv">2</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> y[:N]</span>
@@ -1191,7 +1185,7 @@ R^2: 0.997/1.0</code></pre>
 <li>The cube of the input signal: <span class="math inline">\(y(t) = [f(t)]^3\)</span></li>
 <li>A combination of the nonlinear transformations: <span class="math inline">\(y(t) = \sqrt{2}f(t) + [f(t)]^2 + 5[f(t)]^3\)</span></li>
 </ol>
-<div id="9772ef8b" class="cell" data-execution_count="12">
+<div id="835480ed" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>train_fraction <span class="op">=</span> <span class="fl">0.7</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>ridge_alpha <span class="op">=</span> <span class="dv">2</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>

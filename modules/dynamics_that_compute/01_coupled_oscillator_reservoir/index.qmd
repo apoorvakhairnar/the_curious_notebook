@@ -1,6 +1,6 @@
 ---
 title: "Coupled Oscillator Reservoir"
-description: "A notebook-derived article exploring oscillator dynamics and coupled oscillators as a possible reservoir-computing toy model."
+description: ""
 categories:
   - dynamics
   - reservoir computing
