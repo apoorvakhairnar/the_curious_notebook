@@ -1,5 +1,26 @@
 [
   {
+    "objectID": "resources/tools.html",
+    "href": "resources/tools.html",
+    "title": "Tools",
+    "section": "",
+    "text": "TODO: Add tools, libraries, and workflows that support the notebook."
+  },
+  {
+    "objectID": "resources/tools.html#tools",
+    "href": "resources/tools.html#tools",
+    "title": "Tools",
+    "section": "",
+    "text": "TODO: Add tools, libraries, and workflows that support the notebook."
+  },
+  {
+    "objectID": "resources/tools.html#workflow-notes",
+    "href": "resources/tools.html#workflow-notes",
+    "title": "Tools",
+    "section": "Workflow notes",
+    "text": "Workflow notes\nTODO: Add setup, rendering, or maintenance notes when they are ready."
+  },
+  {
     "objectID": "posts/index.html",
     "href": "posts/index.html",
     "title": "Posts",
@@ -14,39 +35,150 @@
     "text": "Posts will appear here once they are ready to publish. For now, the notebook is focused on the active modules and core site pages."
   },
   {
-    "objectID": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html",
-    "href": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html",
-    "title": "What is Reservoir Computing?",
-    "section": "",
-    "text": "Imagine you have a pool of water and you throw a stone into it. The stone creates ripples. If you throw another stone before the first ripples die out, the new ripples interfere with the old ones. If you keep doing this, the surface of the water starts to carry a short history of what has happened to it.\nThat is the important part: the pool does not just react to the latest stone. Its current state also depends on the stones that came before.\nNow imagine you could observe the ripples carefully enough. Maybe the pattern on the surface could tell you something about the sequence of stones: how many were thrown, how far apart they were, or how strongly they disturbed the water. In a playful version of this idea, you might even imagine shaping the pool so the ripples bounce around in useful or surprising ways. This analogy is inspired by this video demonstration.\nReservoir computing starts from a similar intuition. We take a dynamical system, drive it with an input signal, observe how its internal state changes, and then learn a simple mapping from those observed states to a useful output. This analogy is inspired by this video demonstration."
-  },
-  {
-    "objectID": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html#the-reservoir-idea",
-    "href": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html#the-reservoir-idea",
-    "title": "What is Reservoir Computing?",
-    "section": "The Reservoir Idea",
-    "text": "The Reservoir Idea\nIn machine learning terms, reservoir computing is a framework for processing time-varying data. It is especially useful when the order of inputs matters, such as signals, sensor readings, speech, motion, or any sequence where the past can influence the present.\nThe “reservoir” is usually a recurrent system. In a common software version, this reservoir is a network of units connected to one another, including connections that loop back through time. These recurrent connections let the system develop memory: not perfect memory, but a fading trace of recent inputs.\nThe unusual part is that the reservoir itself is not usually trained. Its internal connections are often chosen randomly and then kept fixed. The input signal is fed into this fixed system, and the reservoir produces a rich, changing pattern of activity.\nInstead of adjusting all the internal connections, reservoir computing trains only a final output layer. This final layer is often called the readout."
-  },
-  {
-    "objectID": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html#a-more-technical-view",
-    "href": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html#a-more-technical-view",
-    "title": "What is Reservoir Computing?",
-    "section": "A More Technical View",
-    "text": "A More Technical View\nAt each time step, the reservoir receives an input. Its internal state updates based on three things:\n\nthe current input,\nthe previous reservoir state,\nthe fixed internal connections of the reservoir.\n\nBecause the reservoir has recurrent connections, its state can depend on recent history. Because the units are often nonlinear, the reservoir can transform the input into a more expressive representation.\nThe readout then learns how to combine these reservoir states to produce the desired output. This is usually done with a relatively simple regression method, such as linear regression or ridge regression.\nSo the training problem becomes much smaller than training a full recurrent neural network. We are not asking the whole system to learn from scratch. We are asking a fixed dynamic system to create useful features, and then training a readout to use those features."
-  },
-  {
-    "objectID": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html#why-this-can-be-useful",
-    "href": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html#why-this-can-be-useful",
-    "title": "What is Reservoir Computing?",
-    "section": "Why This Can Be Useful",
-    "text": "Why This Can Be Useful\nReservoir computing is useful because it separates two jobs.\nThe reservoir handles dynamics, memory, and nonlinear transformation. The readout handles learning the specific task. This can make training faster and simpler than training every connection in a recurrent neural network.\nIt is also useful because the reservoir does not have to be a conventional neural network. In principle, any suitable dynamical system could act as a reservoir if it has enough memory, nonlinearity, and observable state. This is where the idea connects to physical reservoir computing: a physical system, or a simulated physical system, might transform input signals through its own natural dynamics.\nThat does not mean every complex-looking system is a good reservoir. A useful reservoir should preserve enough information about recent inputs, transform that information in helpful ways, and allow a readout to learn a task reliably. These are things we have to test, not assume.\nFor this notebook, reservoir computing is interesting because it gives us a careful way to ask a curious question:\n\nCan the dynamics of a system become part of the computation?\n\nThe rest of this module explores that question through toy models, simulations, and small experiments."
-  },
-  {
     "objectID": "modules/index.html",
     "href": "modules/index.html",
     "title": "Modules",
     "section": "",
     "text": "Dynamics That Compute\nToy simulations and notes on physical systems that transform information through their dynamics.\nActive Module"
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html",
+    "href": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html",
+    "title": "Coupled Oscillator Reservoir",
+    "section": "",
+    "text": "An oscillator is something that moves back and forth around a resting point. A simple example is an object attached to a spring. Pull the object, let it go, and it does not just move once and stop. It keeps moving back and forth around its resting position.\nThat back-and-forth motion is called oscillation. The resting position in the middle is called the equilibrium position. You can think of it as the place the object would like to return to, even though its momentum keeps carrying it past that point.\nIn a perfectly ideal model, the object would keep oscillating forever. Real systems are less generous. Friction, air resistance, and other losses slowly drain energy from the motion, so the oscillation gradually fades. That gradual slowing is called damping.\n\n\n\nImage of a mass-spring system\n\n\n\n\nHere is the first mathematical version of the story. A harmonic oscillator describes an ideal oscillator with no damping and no external force pushing on it: \\[\\frac{d^2x}{dt^2} + \\omega^2 x = 0\\] Here, \\(x\\) is the displacement from equilibrium, \\(t\\) is time, and \\(\\omega=\\sqrt{\\frac{k}{m}}\\) is the angular frequency. The solution is sinusoidal motion: the familiar repeating wave we expect from a spring-like system.\nNow let’s make the model a little more realistic by adding damping: \\[\\frac{d^2x}{dt^2} + \\beta \\frac{dx}{dt} + \\omega^2 x = 0\\] where \\(\\beta\\) is the damping coefficient. Depending on this value, the oscillator may keep ringing for a while, return smoothly to rest, or settle as quickly as possible without overshooting.\n\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom scipy.integrate import solve_ivp\n\ndef harmonic_oscillator(t, y, omega):\n    x, v = y\n    dxdt = v\n    dvdt = -omega**2 * x\n    return [dxdt, dvdt]\n\ndef damped_harmonic_oscillator(t, y, omega, beta):\n    x, v = y\n    dxdt = v\n    dvdt = -beta * v - omega**2 * x\n    return [dxdt, dvdt]\n\n# Parameters\nA = 1.0      # Amplitude\nk = 4 * np.pi**2  # Spring constant\nm = 2.5      # Mass\nomega = np.sqrt(k / m)  # Natural frequency\nbeta = 0.5  # Damping coefficient for underdamped case\nt = np.linspace(0, 20, 2000)  # Time array\n\n# Initial condition\ny = [A, 0]  # Initial displacement and velocity\n\n# Compute the damped harmonic oscillator\nx_ideal = solve_ivp(harmonic_oscillator, (t[0], t[-1]), y, args=(omega,), t_eval=t).y[0]\nx_under = solve_ivp(damped_harmonic_oscillator, (t[0], t[-1]), y, args=(omega, beta), t_eval=t).y[0]\n\n# Plotting\nfig, ax = plt.subplots(1, 2, figsize=(10, 5), sharey=True)\nax[0].plot(t, x_ideal)\nax[0].set_title('Ideal Harmonic Oscillator')\nax[0].set_xlabel('Time (s)')\nax[0].set_ylabel('Displacement $x$')\n\nax[1].plot(t, x_under)\nax[1].set_title('Damped Harmonic Oscillator')\nax[1].set_xlabel('Time (s)')\nax[1].set_ylabel('Displacement $x$')\n\nfig.suptitle('Comparison of Motion of an Object in Harmonic Oscillators')\nplt.show()\n\n\nSo far, we have only nudged the oscillator and watched what it does on its own. No one keeps pushing it after the initial start. That is called free oscillation.\nBut what if we keep feeding the system an input while it moves? That gives us forced oscillation, where an outside signal keeps influencing the oscillator:\n\\[\\frac{d^2x}{dt^2} + \\beta \\frac{dx}{dt} + \\omega^2 x = f(t)\\]\nHere, \\(f(t)\\) is the external driving force. You can think of it as the signal we are injecting into the system.\n\ndef forced_harmonic_oscillator(t, y, omega, beta, F0, omega_d):\n    x, v = y\n    dxdt = v\n    Ft = F0 * np.sin(omega_d * t)\n    dvdt = (Ft / m) - beta * v - omega**2 * x\n    return [dxdt, dvdt]\n\n# Parameters for forced oscillator\nF0 = 2.5  # Amplitude of driving force\nomega_d = np.pi  # Driving frequency\n\n# Compute the forced harmonic oscillator\nx_forced = solve_ivp(forced_harmonic_oscillator, (t[0], t[-1]), y, args=(omega, beta, F0, omega_d), t_eval=t).y[0]\n\n# Plotting the forced harmonic oscillator\nplt.figure(figsize=(10, 5))\nplt.plot(t, x_under, '--', label='Free Damped Oscillation', alpha=0.7)\nplt.plot(t, x_forced, label='Forced Oscillation')\nplt.title('Forced Harmonic Oscillator')\nplt.xlabel('Time (s)')\nplt.ylabel('Displacement $x$')\nplt.legend()\nplt.show()\n\n\nNow the oscillator has someone keeping it company. A periodic driving force can keep the motion going longer because it adds energy back into the system, partly replacing what damping removes. The exact motion depends on the frequency and amplitude of the driving force, along with the oscillator’s own natural frequency and damping.\nSo far, that input has come from outside the oscillator. But here is the next twist: an oscillator can also be pushed around by another oscillator. If two moving systems are connected, the motion of one becomes part of the force felt by the other. That idea leads us naturally to coupled oscillators.",
+    "crumbs": [
+      "Experiments",
+      "Coupled Oscillator Reservoir"
+    ]
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#the-basic-model",
+    "href": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#the-basic-model",
+    "title": "Coupled Oscillator Reservoir",
+    "section": "",
+    "text": "Here is the first mathematical version of the story. A harmonic oscillator describes an ideal oscillator with no damping and no external force pushing on it: \\[\\frac{d^2x}{dt^2} + \\omega^2 x = 0\\] Here, \\(x\\) is the displacement from equilibrium, \\(t\\) is time, and \\(\\omega=\\sqrt{\\frac{k}{m}}\\) is the angular frequency. The solution is sinusoidal motion: the familiar repeating wave we expect from a spring-like system.\nNow let’s make the model a little more realistic by adding damping: \\[\\frac{d^2x}{dt^2} + \\beta \\frac{dx}{dt} + \\omega^2 x = 0\\] where \\(\\beta\\) is the damping coefficient. Depending on this value, the oscillator may keep ringing for a while, return smoothly to rest, or settle as quickly as possible without overshooting.\n\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom scipy.integrate import solve_ivp\n\ndef harmonic_oscillator(t, y, omega):\n    x, v = y\n    dxdt = v\n    dvdt = -omega**2 * x\n    return [dxdt, dvdt]\n\ndef damped_harmonic_oscillator(t, y, omega, beta):\n    x, v = y\n    dxdt = v\n    dvdt = -beta * v - omega**2 * x\n    return [dxdt, dvdt]\n\n# Parameters\nA = 1.0      # Amplitude\nk = 4 * np.pi**2  # Spring constant\nm = 2.5      # Mass\nomega = np.sqrt(k / m)  # Natural frequency\nbeta = 0.5  # Damping coefficient for underdamped case\nt = np.linspace(0, 20, 2000)  # Time array\n\n# Initial condition\ny = [A, 0]  # Initial displacement and velocity\n\n# Compute the damped harmonic oscillator\nx_ideal = solve_ivp(harmonic_oscillator, (t[0], t[-1]), y, args=(omega,), t_eval=t).y[0]\nx_under = solve_ivp(damped_harmonic_oscillator, (t[0], t[-1]), y, args=(omega, beta), t_eval=t).y[0]\n\n# Plotting\nfig, ax = plt.subplots(1, 2, figsize=(10, 5), sharey=True)\nax[0].plot(t, x_ideal)\nax[0].set_title('Ideal Harmonic Oscillator')\nax[0].set_xlabel('Time (s)')\nax[0].set_ylabel('Displacement $x$')\n\nax[1].plot(t, x_under)\nax[1].set_title('Damped Harmonic Oscillator')\nax[1].set_xlabel('Time (s)')\nax[1].set_ylabel('Displacement $x$')\n\nfig.suptitle('Comparison of Motion of an Object in Harmonic Oscillators')\nplt.show()\n\n\nSo far, we have only nudged the oscillator and watched what it does on its own. No one keeps pushing it after the initial start. That is called free oscillation.\nBut what if we keep feeding the system an input while it moves? That gives us forced oscillation, where an outside signal keeps influencing the oscillator:\n\\[\\frac{d^2x}{dt^2} + \\beta \\frac{dx}{dt} + \\omega^2 x = f(t)\\]\nHere, \\(f(t)\\) is the external driving force. You can think of it as the signal we are injecting into the system.\n\ndef forced_harmonic_oscillator(t, y, omega, beta, F0, omega_d):\n    x, v = y\n    dxdt = v\n    Ft = F0 * np.sin(omega_d * t)\n    dvdt = (Ft / m) - beta * v - omega**2 * x\n    return [dxdt, dvdt]\n\n# Parameters for forced oscillator\nF0 = 2.5  # Amplitude of driving force\nomega_d = np.pi  # Driving frequency\n\n# Compute the forced harmonic oscillator\nx_forced = solve_ivp(forced_harmonic_oscillator, (t[0], t[-1]), y, args=(omega, beta, F0, omega_d), t_eval=t).y[0]\n\n# Plotting the forced harmonic oscillator\nplt.figure(figsize=(10, 5))\nplt.plot(t, x_under, '--', label='Free Damped Oscillation', alpha=0.7)\nplt.plot(t, x_forced, label='Forced Oscillation')\nplt.title('Forced Harmonic Oscillator')\nplt.xlabel('Time (s)')\nplt.ylabel('Displacement $x$')\nplt.legend()\nplt.show()\n\n\nNow the oscillator has someone keeping it company. A periodic driving force can keep the motion going longer because it adds energy back into the system, partly replacing what damping removes. The exact motion depends on the frequency and amplitude of the driving force, along with the oscillator’s own natural frequency and damping.\nSo far, that input has come from outside the oscillator. But here is the next twist: an oscillator can also be pushed around by another oscillator. If two moving systems are connected, the motion of one becomes part of the force felt by the other. That idea leads us naturally to coupled oscillators.",
+    "crumbs": [
+      "Experiments",
+      "Coupled Oscillator Reservoir"
+    ]
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#what-changes-when-we-connect-many-oscillators",
+    "href": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#what-changes-when-we-connect-many-oscillators",
+    "title": "Coupled Oscillator Reservoir",
+    "section": "What changes when we connect many oscillators?",
+    "text": "What changes when we connect many oscillators?\nTwo oscillators are already interesting. But what happens if we connect many of them? Now a signal does not just move back and forth in one place. It spreads, mixes, fades, and reappears across the whole system.\nThat is the opening we need for physical reservoir computing. Under the right conditions, a network of coupled oscillators can act like a physical reservoir: the input signal creates a rich pattern of internal motion, and a simple output model can learn to use that pattern for tasks such as signal processing, pattern recognition, or other machine-learning-style problems.\nIf we have \\(N\\) oscillators, each oscillator has its own displacement, damping, natural frequency, input, and connections to the others. One way to write the motion of the \\(i^{th}\\) oscillator is:\n\\[\\frac{d^2x_i}{dt^2} + \\beta_i \\frac{dx_i}{dt} + \\omega_i^2 x_i = f_i(t) + \\sum_{j=1}^{N} c_{ij} (x_j - x_i)\\]\nHere, \\(x_i\\) is the displacement, \\(\\beta_i\\) is the damping coefficient, \\(\\omega_i\\) is the natural frequency, \\(f_i(t)\\) is the external driving force, and \\(c_{ij}\\) is the coupling strength between oscillator \\(i\\) and oscillator \\(j\\). The sum is the important part: it gathers the influence of the rest of the network on oscillator \\(i\\).\n\ndef coupled_oscillators(t, y, k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix):\n    N = len(y) // 2\n    x = y[:N]\n    v = y[N:]\n\n    dxdt = v\n    dvdt = np.zeros(N)\n    for i in range(N):\n        Ft = F_matrix[i] * np.sin(omega_d * t)\n        coupling_term = sum(c_matrix[i, j] * (x[j] - x[i]) for j in range(N))\n        dvdt[i] = - beta_matrix[i] * v[i] - (k_matrix[i, i] / m) * x[i] + coupling_term + Ft / m\n    \n    \n    return np.concatenate([dxdt, dvdt])\n\n# Parameters for a larger network of coupled oscillators\nN = 5  # Number of oscillators\nk_matrix = np.full((N, N), 0.5)  # Spring constant matrix\nm = 1.0  # Mass of each oscillator\nbeta_matrix = np.full(N, 0.1)  # Damping coefficients\n\nF0 = 1.0\nomega_d = 2 * np.pi  # Driving frequency\nseed = 56\nrng = np.random.default_rng(seed)\nF_matrix = np.zeros(N)\nF_matrix[0:1] = 1.0  # Only the first oscillator is driven, others are passive\n# F_matrix = np.random.rand(N)# * 2 * np.pi  # Random driving frequencies\nseed = 268\nrng = np.random.default_rng(seed)\nc_matrix = rng.uniform(0, 10, (N, N))  # Random coupling strengths\ny0 = np.concatenate([np.ones(N), np.zeros(N)])  # Initial conditions: [x1, x2, ..., v1, v2, ...]\nt_span = (0, 20)\nt_eval = np.linspace(*t_span, 1000)\n\n# Solve the larger network of coupled oscillators\nsol = solve_ivp(coupled_oscillators, t_span, y0, args=(k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix), t_eval=t_eval)\n\n# Plotting the larger network of coupled oscillators\nplt.figure(figsize=(10, 5))\nfor i in range(N):\n    plt.plot(sol.t, sol.y[i], label=f'Oscillator {i+1}')\nplt.title('Larger Network of Coupled Oscillators')\nplt.xlabel('Time (s)')\nplt.ylabel('Displacement $x_i$')\nplt.legend()\nplt.show()",
+    "crumbs": [
+      "Experiments",
+      "Coupled Oscillator Reservoir"
+    ]
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#scaling-up-the-reservoir",
+    "href": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#scaling-up-the-reservoir",
+    "title": "Coupled Oscillator Reservoir",
+    "section": "Scaling up the reservoir",
+    "text": "Scaling up the reservoir\nThe previous example was deliberately small and a bit rough: only a few oscillators, with randomly chosen parameters. Now let’s make the setup feel more like a reservoir. We will use more oscillators, choose the parameters more carefully, and drive the system with a shared input signal.\nIn this version, the input enters through the first oscillator. The others do not receive it directly; they feel it through the coupling. That is exactly what we want to watch: how does one signal ripple through the system and turn into many different internal responses?\n\nimport scipy\n\ndef drive_signal(t, omega_d):\n    return np.sin(omega_d * t)\n\ndef coupled_oscillators(t, y, k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix):\n    N = len(y) // 2\n    x = y[:N]\n    v = y[N:]\n\n    dxdt = v\n\n    u = drive_signal(t, omega_d)\n\n    row_sums = c_matrix.sum(axis=1)\n    coupling_term = c_matrix @ x - row_sums * x  # Efficient coupling term calculation\n\n    dvdt = -beta_matrix * v - omega_n**2 * x + coupling_term + (F_matrix * F0 * u) / m\n\n    return np.concatenate([dxdt, dvdt])\n\ndef make_coupling_matrix(N, density, coupling_strength, omega_n, rng):\n    A = rng.random((N, N)) &lt; density\n    A = np.triu(A, 1)\n    A = A + A.T\n\n    weights = rng.uniform(0.5, 1.5, size=(N, N))\n    c_matrix = A * weights\n\n    row_sums = c_matrix.sum(axis=1)\n    max_row_sum = row_sums.max()\n\n    if max_row_sum &gt; 0:\n        target_row_sum = coupling_strength * np.median(omega_n**2)\n        c_matrix *= target_row_sum / max_row_sum\n\n    np.fill_diagonal(c_matrix, 0.0)\n    return c_matrix\n\n# Tuned parameters for a bounded, diverse reservoir response\nN = 128\nm = 1.0\nseed = 56\nrng = np.random.default_rng(seed)\n\nzeta_matrix = rng.uniform(0.3, 1.0, N)\nomega_n = np.exp(rng.uniform(np.log(0.3), np.log(5.0), N))\nk_matrix = np.diag(m * omega_n**2)\nbeta_matrix = 2 * m * zeta_matrix * omega_n\n\nomega_d = 1.0  # Driving frequency\nF0 = 2.5\nF_matrix = np.zeros(N)\ninput_nodes = np.array([0])  # Only the first oscillator is driven\nreadout_nodes = np.arange(1, N)  # All oscillators are read out except the first one\nF_matrix[input_nodes] = 1.0  # Only the first oscillator is driven, others are passive\n\nseed = 268\nrng = np.random.default_rng(seed)\nc_matrix = make_coupling_matrix(N, density=0.1, coupling_strength=10, omega_n=omega_n, rng=rng)\n\ny0 = 0.01 * rng.standard_normal(2 * N)\nt_span = (0.0, 100.0)\nt_eval = np.linspace(*t_span, 5000)\n\nsol = solve_ivp(\n    coupled_oscillators,\n    t_span,\n    y0,\n    args=(k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix),\n    t_eval=t_eval,\n    max_step=0.05,\n    rtol=1e-6,\n    atol=1e-8,\n )\n\nassert sol.success, sol.message\nX_sol = sol.y[:N].T\nX = X_sol[:, readout_nodes]  # Read out only the passive oscillators\ninput_trace = drive_signal(sol.t, omega_d)\n\nfig, ax = plt.subplots(1, 1, figsize=(12, 5))\nfor i in range(12):\n    ax.plot(sol.t, X[:, i], label=f\"Oscillator {i + 1}\", alpha=0.8)\nax.set_title(\"Tuned coupled oscillator reservoir\")\nax.set_xlabel(\"Time (s)\")\nax.set_ylabel(\"Displacement $x_i$\")\nax.legend(ncol=3, fontsize=9)\nplt.show()",
+    "crumbs": [
+      "Experiments",
+      "Coupled Oscillator Reservoir"
+    ]
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#reconstructing-the-input-signal-from-the-oscillator-states",
+    "href": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#reconstructing-the-input-signal-from-the-oscillator-states",
+    "title": "Coupled Oscillator Reservoir",
+    "section": "Reconstructing the input signal from the oscillator states",
+    "text": "Reconstructing the input signal from the oscillator states\nNow the traces are not identical copies of the input. Each oscillator responds with its own amplitude and phase, giving us several related views of the same driving signal.\nSo here is the test: if we look only at these oscillator states, can we reconstruct the signal that originally drove the system?\n\nHow do we do that?\nWe are going to collect the states that is, the displacements of all the oscillators in the system from 0 to 100 seconds. We will use 70% of that data to obtain the mapping from the oscillator states to the input signal, and then we will test how well that mapping works on the remaining 30% of the data. If the reservoir is doing a good job, then we should be able to reconstruct the input signal from the internal states with high accuracy.\n\nfrom sklearn.metrics import r2_score, mean_squared_error\n\ndef __fit__(X_eval, u_eval, train_size, ridge_alpha):\n    X_train = X_eval[:train_size]\n    X_test = X_eval[train_size:]\n    y_train = u_eval[:train_size]\n    y_train = y_train.T\n    y_test = u_eval[train_size:]\n    y_test = y_test.T\n\n    X_train_aug = np.column_stack([X_train, np.ones(len(X_train))]).T\n    X_test_aug = np.column_stack([X_test, np.ones(len(X_test))]).T\n\n    ridge = np.matmul(X_train_aug, X_train_aug.T) + ridge_alpha * np.identity(X_train_aug.shape[0])\n    ridge_inv = np.linalg.inv(ridge)\n    yX = np.matmul(y_train, X_train_aug.T)\n    Wout = np.matmul(yX, ridge_inv.T)\n\n    y_pred = Wout @ X_test_aug\n    baseline_pred = np.full_like(y_test, y_train.mean())\n\n    score = r2_score(y_true=y_test.T, y_pred=y_pred.T)\n    print(f\"R^2: {score:.3f}/1.0\")\n\n    return y_test, y_pred, score, Wout\n\n# Delayed input reconstruction on the tuned reservoir states\nwashout = 200\ndelay_steps = 0\ntrain_fraction = 0.7\nridge_alpha = 2\n\nprint(f\"Task: Delayed input reconstruction (delay = {delay_steps * (t_eval[1] - t_eval[0]):.3f} s)\")\n\nX_eval = X[washout:]\nu_eval = input_trace[washout:]\nu_eval = u_eval[:, np.newaxis]\n\nif delay_steps &gt;= len(u_eval):\n    raise ValueError(\"delay_steps is too large for the available time series length.\")\n\nX_delayed = X_eval[delay_steps:]\nu_target = u_eval[:-delay_steps] if delay_steps &gt; 0 else u_eval\n\nn_samples = len(u_target)\ntrain_size = int(train_fraction * n_samples)\n\ny_test, y_pred, score, _ = __fit__(X_delayed, u_target, train_size, ridge_alpha)\n\ntest_time = sol.t[washout + delay_steps + train_size : washout + delay_steps + n_samples]\n\nfig, ax = plt.subplots(1, 1, figsize=(10, 5))\nax.plot(test_time, y_test.T, label=\"Input\", color=\"black\", linewidth=1.5)\nax.plot(test_time, y_pred.T, label=\"Reconstruction\", color=\"tab:orange\")\nax.set_title(\"Input reconstruction using Oscillator output\")\nax.set_ylabel(\"Input\")\nax.set_xlabel(\"Time (s)\")\nax.legend()\nplt.show()\n\nTask: Delayed input reconstruction (delay = 0.000 s)\nR^2: 0.989/1.0\n\nOkay, great! This system can reconstruct a simple sine wave input signal. Quantitavely, this reconstuction has a score of 0.989 out of 1. That is pretty good, even though not perfect.\nBut we should not celebrate too quickly. A single sine wave is a very simple signal as it keeps repeating periodically. It is not a real test of the system’s ability to process complex information. To really see the potential of this reservoir, we need to try it with more complicated inputs and more challenging tasks.",
+    "crumbs": [
+      "Experiments",
+      "Coupled Oscillator Reservoir"
+    ]
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#a-harder-input-signal",
+    "href": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#a-harder-input-signal",
+    "title": "Coupled Oscillator Reservoir",
+    "section": "A harder input signal",
+    "text": "A harder input signal\nThis time, let’s dirve the first oscillator with an input signal that is a sum of 3 sine waves with different frequencies. This is a more complex signal that contains more information than a single sine wave and also does not repeat.\n\ndef drive_signal(t, omega_d):\n    t = np.asarray(t)\n    return (\n        np.sin(omega_d * t) + 0.65 * np.sin(np.sqrt(2) * omega_d * t + 0.6) + 0.4 * np.sin(np.sqrt(3) * omega_d * t + 1.2)\n    )\n\nsol = solve_ivp(\n    coupled_oscillators,\n    t_span,\n    y0,\n    args=(k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix),\n    t_eval=t_eval,\n    max_step=0.05,\n    rtol=1e-6,\n    atol=1e-8,\n )\n\nassert sol.success, sol.message\nX_sol = sol.y[:N].T\nX = X_sol[:, readout_nodes]  # Read out only the passive oscillators\ninput_trace = drive_signal(sol.t, omega_d)\n\n# Input reconstruction on the tuned reservoir states\nwashout = 200\ndelay_steps = 0\ntrain_fraction = 0.7\nridge_alpha = 2\n\nprint(f\"Task: Delayed input reconstruction (delay = {delay_steps * (t_eval[1] - t_eval[0]):.3f} s)\")\n\nX_eval = X[washout:]\nu_eval = input_trace[washout:]\nu_eval = u_eval[:, np.newaxis]\n\nif delay_steps &gt;= len(u_eval):\n    raise ValueError(\"delay_steps is too large for the available time series length.\")\n\nX_delayed = X_eval[delay_steps:]\nu_target = u_eval[:-delay_steps] if delay_steps &gt; 0 else u_eval\n\nn_samples = len(u_target)\ntrain_size = int(train_fraction * n_samples)\n\ny_test, y_pred, score, _ = __fit__(X_delayed, u_target, train_size, ridge_alpha)\n\ntest_time = sol.t[washout + delay_steps + train_size : washout + delay_steps + n_samples]\n\nfig, ax = plt.subplots(2, 1, figsize=(10, 10))\nax[0].plot(sol.t, input_trace, label=\"Input\", color=\"black\", linewidth=1.5)\nax[0].set_title(\"Input signal\")\nax[0].set_ylabel(\"Input\")\nax[0].set_xlabel(\"Time (s)\")\n\nax[1].plot(test_time, y_test.T, label=\"Input\", color=\"black\", linewidth=1.5)\nax[1].plot(test_time, y_pred.T, label=\"Reconstruction\", color=\"tab:orange\")\nax[1].set_title(\"Input reconstruction using Oscillator output\")\nax[1].set_ylabel(\"Input\")\nax[1].set_xlabel(\"Time (s)\")\nax[1].legend()\nplt.show()\n\nTask: Delayed input reconstruction (delay = 0.000 s)\nR^2: 0.736/1.0\n\nThis reconstruction is not where we want it to be. That is useful information, not a failure. It tells us that this particular reservoir setup is not capturing enough of the signal structure for the output model to recover it well.\nSo let’s tune the system and see what changes.",
+    "crumbs": [
+      "Experiments",
+      "Coupled Oscillator Reservoir"
+    ]
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#tuning-the-reservoir-response",
+    "href": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#tuning-the-reservoir-response",
+    "title": "Coupled Oscillator Reservoir",
+    "section": "Tuning the reservoir response",
+    "text": "Tuning the reservoir response\nI am going to increase the coupling strength, the driving force, and the driving frequency, then compare the result.\n\ndef drive_signal(t, omega_d):\n    t = np.asarray(t)\n    return (\n        np.sin(omega_d * t) + 0.65 * np.sin(np.sqrt(2) * omega_d * t + 0.6) + 0.4 * np.sin(np.sqrt(3) * omega_d * t + 1.2)\n    )\n\n# Tuned parameters for a bounded, diverse reservoir response\nN = 128\nm = 1.0\nseed = 56\nrng = np.random.default_rng(seed)\n\nzeta_matrix = rng.uniform(0.3, 1.0, N)\nomega_n = np.exp(rng.uniform(np.log(0.3), np.log(5.0), N))\nk_matrix = np.diag(m * omega_n**2)\nbeta_matrix = 2 * m * zeta_matrix * omega_n\n\nomega_d = 2.0  # Driving frequency\nF0 = 10\nF_matrix = np.zeros(N)\ninput_nodes = np.array([0])  # Only the first oscillator is driven\nreadout_nodes = np.arange(1, N)  # All oscillators are read out except the first one\nF_matrix[input_nodes] = 1.0  # Only the first oscillator is driven, others are passive\n\nseed = 268\nrng = np.random.default_rng(seed)\nc_matrix = make_coupling_matrix(N, density=0.1, coupling_strength=20, omega_n=omega_n, rng=rng)\n\ny0 = 0.01 * rng.standard_normal(2 * N)\nt_span = (0.0, 100.0)\nt_eval = np.linspace(*t_span, 5000)\n\nsol = solve_ivp(\n    coupled_oscillators,\n    t_span,\n    y0,\n    args=(k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix),\n    t_eval=t_eval,\n    max_step=0.05,\n    rtol=1e-6,\n    atol=1e-8,\n )\n\nassert sol.success, sol.message\nX_sol = sol.y[:N].T\nX = X_sol[:, readout_nodes]  # Read out only the passive oscillators\ninput_trace = drive_signal(sol.t, omega_d)\n\n# Input reconstruction on the tuned reservoir states\nwashout = 200\ndelay_steps = 0\ntrain_fraction = 0.7\nridge_alpha = 2\n\nprint(f\"Task: Delayed input reconstruction (delay = {delay_steps * (t_eval[1] - t_eval[0]):.3f} s)\")\n\nX_eval = X[washout:]\nu_eval = input_trace[washout:]\nu_eval = u_eval[:, np.newaxis]\n\nif delay_steps &gt;= len(u_eval):\n    raise ValueError(\"delay_steps is too large for the available time series length.\")\n\nX_delayed = X_eval[delay_steps:]\nu_target = u_eval[:-delay_steps] if delay_steps &gt; 0 else u_eval\n\nn_samples = len(u_target)\ntrain_size = int(train_fraction * n_samples)\n\ny_test, y_pred, score, _ = __fit__(X_delayed, u_target, train_size, ridge_alpha)\n\ntest_time = sol.t[washout + delay_steps + train_size : washout + delay_steps + n_samples]\n\nfig, ax = plt.subplots(2, 1, figsize=(10, 10))\nax[0].plot(sol.t, input_trace, label=\"Input\", color=\"black\", linewidth=1.5)\nax[0].set_title(\"Input signal\")\nax[0].set_ylabel(\"Input\")\nax[0].set_xlabel(\"Time (s)\")\n\nax[1].plot(test_time, y_test.T, label=\"Input\", color=\"black\", linewidth=1.5)\nax[1].plot(test_time, y_pred.T, label=\"Reconstruction\", color=\"tab:orange\")\nax[1].set_title(\"Input reconstruction using Oscillator output\")\nax[1].set_ylabel(\"Input\")\nax[1].set_xlabel(\"Time (s)\")\nax[1].legend()\nplt.show()\n\nTask: Delayed input reconstruction (delay = 0.000 s)\nR^2: 0.996/1.0\n\nGreat! The reconstruction is much better now, with a score of 0.998 out of 1. That is a significant improvement, showing that the reservoir can capture more of the signal structure when we adjust the parameters.\nSo far, we have been asking the reservoir about the present: can the current state tell us what the input is right now?\nBut the more interesting question is about memory. Does the system carry traces of what happened a little while ago? Let’s test that by asking whether the output model can reconstruct the input after a delay.",
+    "crumbs": [
+      "Experiments",
+      "Coupled Oscillator Reservoir"
+    ]
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#testing-memory",
+    "href": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#testing-memory",
+    "title": "Coupled Oscillator Reservoir",
+    "section": "Testing memory",
+    "text": "Testing memory\nHere, we follow the same procedure as before, but this time we obtain a mapping from the current oscillator states to the input signal from a few seconds ago.\nI am going to set the delay to 1000 steps, which is about 20 seconds in this simulation. That means the output model will try to reconstruct the input signal from 20 seconds ago, using only the current state of the oscillator network.\n\n# Input reconstruction on the tuned reservoir states\ndelay_steps = 1000\n\nprint(f\"Task: Delayed input reconstruction (delay = {delay_steps * (t_eval[1] - t_eval[0]):.3f} s)\")\n\nif delay_steps &gt;= len(u_eval):\n    raise ValueError(\"delay_steps is too large for the available time series length.\")\n\nX_delayed = X_eval[delay_steps:]\nu_target = u_eval[:-delay_steps] if delay_steps &gt; 0 else u_eval\n\nn_samples = len(u_target)\ntrain_size = int(train_fraction * n_samples)\n\ny_test, y_pred, score, _ = __fit__(X_delayed, u_target, train_size, ridge_alpha)\n\ntest_time = sol.t[washout + delay_steps + train_size : washout + delay_steps + n_samples]\n\nfig, ax = plt.subplots(1, 1, figsize=(10, 5))\nax.plot(test_time, y_test.T, label=f\"Delayed Input by {delay_steps * (t_eval[1] - t_eval[0]):.3f} s\", color=\"black\", linewidth=1.5)\nax.plot(test_time, y_pred.T, label=\"Reconstruction\", color=\"tab:orange\")\nax.set_title(\"Delayed Input reconstruction using Oscillator output\")\nax.set_ylabel(\"Delayed Input\")\nax.set_xlabel(\"Time (s)\")\nax.legend()\nplt.show()\n\nTask: Delayed input reconstruction (delay = 20.004 s)\nR^2: 0.993/1.0\n\nWonderful! This system is able to reconstruct a delayed input signal very well for this input and parameter setting. This means that the reservoir is not just reacting to the current input, but also retaining information about recent input history.\n\nWhy do we care about memory?\nBecause this is a simple way to test whether the reservoir has memory. If the current state of the oscillator network still contains information from a few seconds ago, then the reservoir can support tasks where recent context matters. For example, if a robot is moving through a room, its next action should not depend only on what it sees right now. It also helps to know what it was seeing and doing a moment ago, because that recent history tells the robot whether it is approaching an object, moving away from it, or turning around.\nNow let’s make the task harder: can the current reservoir state help predict future values of the input signal over a short horizon?",
+    "crumbs": [
+      "Experiments",
+      "Coupled Oscillator Reservoir"
+    ]
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#predicting-a-short-step-ahead",
+    "href": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#predicting-a-short-step-ahead",
+    "title": "Coupled Oscillator Reservoir",
+    "section": "Predicting a short step ahead",
+    "text": "Predicting a short step ahead\n\nWhy do we care about predicting the future?\nBecause that is a common real-world task. If we can use the current state of the reservoir to predict what will happen next, then we can use this capability for anticipating events and making decisions based on what is likely to come. For example, if we are controlling a robot and we know what is going to happen in the next few seconds, we can plan our actions better. Or if we are monitoring a system and we can predict a failure before it happens which will allow us to take preventive measures.\n\n\nHow can we predict the future?\nThis is a different task than reconstructing the past. I will first train the output model to predict the input signal 1 step ahead, which is about 20 milliseconds in this simulation. That means the output model will try to predict the input signal at the next time step, using only the current state of the oscillator network.\n\n# Input reconstruction on the tuned reservoir states\nwashout = 200\ntrain_fraction = 0.7\nridge_alpha = 2\n\nX_eval = X[washout:]\nu_eval = input_trace[washout:]\nu_eval = u_eval[:, np.newaxis]\n\n# Input reconstruction on the tuned reservoir states\nfuture_steps = 1\n\nprint(f\"Task: Future input prediction (steps = {future_steps})\")\n\nX_current = X_eval[:-future_steps]\nu_target = u_eval[future_steps:] if future_steps &gt; 0 else u_eval\n\nn_samples = len(u_target)\ntrain_size = int(train_fraction * n_samples)\n\n_, _, _, Wout = __fit__(X_current, u_target, train_size, ridge_alpha)\n\nTask: Future input prediction (steps = 1)\nR^2: 0.997/1.0\nNow that I have a prediction output model, I will use these predicted input values to drive my oscillator network for a few seconds. The question is: how well does the reservoir’s internal state reflect the future input values that it is trying to predict? If the reservoir can capture the dynamics of the input signal, then the predicted future values should be reasonably close to the actual future values, and the internal states should show patterns that correspond to those predictions. Let’s see how it goes!\n\ndef coupled_oscillators_pred(t, y, k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix, drive_value):\n    N = len(y) // 2\n    x = y[:N]\n    v = y[N:]\n\n    dxdt = v\n\n    u = drive_value\n\n    row_sums = c_matrix.sum(axis=1)\n    coupling_term = c_matrix @ x - row_sums * x  # Efficient coupling term calculation\n\n    dvdt = -beta_matrix * v - omega_n**2 * x + coupling_term + (F_matrix * F0 * u) / m\n\n    return np.concatenate([dxdt, dvdt])\n\ndef readout_prediction(X_current, Wout):\n    X_current_aug = np.append(X_current, 1)\n    y_pred = Wout @ X_current_aug\n    return y_pred\n\ny_current = sol.y[:, washout + future_steps + train_size-1].T.copy()\nx_current = y_current[readout_nodes]\nt_current = sol.t[washout + future_steps + train_size-1]\ndt = t_eval[1] - t_eval[0]\n\ninput_pred_auto = []\nt_pred_auto = []\n\nfor step in range(test_time.shape[0]):\n    # Current displacement\n    x_current = y_current[readout_nodes]\n\n    # Predict future input\n    y_pred = readout_prediction(x_current, Wout)\n    \n    # Store prediction\n    input_pred_auto.append(y_pred)\n\n    # Integrate the coupled oscillators for one step using the predicted input\n    sol_pred = solve_ivp(\n        coupled_oscillators_pred,\n        (t_current, t_current + dt),\n        y_current,\n        args=(k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix, y_pred),\n        t_eval=[t_current + dt],\n        max_step=0.05,\n        rtol=1e-6,\n        atol=1e-8,\n    )\n\n    assert sol_pred.success, sol_pred.message\n    y_current = sol_pred.y[:, -1]  # Update current state to the last predicted state\n    t_current += dt\n\n    t_pred_auto.append(t_current)\n\ninput_true = u_eval[train_size + future_steps : train_size + future_steps + len(input_pred_auto)]\n\nr2_auto = r2_score(y_true=np.array(input_true), y_pred=np.array(input_pred_auto))\nprint(f\"Future input prediction R^2: {r2_auto:.3f}/1.0\")\n\nfig, ax = plt.subplots(1, 1, figsize=(10, 5))\nax.plot(t_pred_auto, input_true, label=f\"Future Input to the Oscillator\", color=\"black\", linewidth=1.5)\nax.plot(t_pred_auto, input_pred_auto, label=\"Real-time Prediction by the Oscillator Reservoir\", color=\"tab:orange\")\nax.set_title(\"Future Input prediction using Oscillator output\")\nax.set_ylabel(\"Future Input\")\nax.set_xlabel(\"Time (s)\")\nax.legend()\nplt.show()\n\nFuture input prediction R^2: 0.940/1.0\n\nThat’s it! We have a reservoir of coupled oscillators that can not only reconstruct past inputs but also predict future values of the input signal. This shows that the reservoir is not just a passive system; it is actively processing the information and retaining useful traces of the input history, as well as anticipating what is likely to come next. This kind of capability is what makes physical reservoirs so powerful for tasks that involve temporal dynamics and sequence processing.",
+    "crumbs": [
+      "Experiments",
+      "Coupled Oscillator Reservoir"
+    ]
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#what-this-toy-reservoir-can-do",
+    "href": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#what-this-toy-reservoir-can-do",
+    "title": "Coupled Oscillator Reservoir",
+    "section": "What this toy reservoir can do",
+    "text": "What this toy reservoir can do\nAt this point, we have seen the main idea in miniature. In this toy simulation, a simple output model can reconstruct delayed inputs and make short-horizon predictions using the current oscillator states, for this particular signal.\nThat is the reservoir-computing idea: we do not micromanage the whole physical system for our purposes. Instead, we let its dynamics create a rich set of changing states, then obtain a simple mapping to interpret those states.\nWhy care about that? Because many real problems involve signals that unfold over time: noisy sensors, repeated patterns, machine vibrations, biological rhythms, and so on. A reservoir does not magically solve those problems by itself, but it can provide useful time-dependent features for a mapping. Physical reservoir computing is interesting because, for some specialized tasks, the physics may do part of the signal transformation that a digital system would otherwise have to simulate.\nBut all of this comes with a caveat: not all oscillator networks will work equally well for every input signal or task. The choice of parameters, the number of oscillators, the coupling strengths, and the nature of the input signal all play a role in determining how effective the reservoir will be.\nOur current oscillator network does really well at reconstruction and prediction for this particular input signal. But these two tasks are not the whole story. A useful reservoir should also be able to transform the input in ways that are helpful for other tasks. So let’s give this reservoir one more challenge. Can it help compute a nonlinear function of the input signal?",
+    "crumbs": [
+      "Experiments",
+      "Coupled Oscillator Reservoir"
+    ]
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#a-final-check-nonlinear-computation",
+    "href": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#a-final-check-nonlinear-computation",
+    "title": "Coupled Oscillator Reservoir",
+    "section": "A final check: nonlinear computation",
+    "text": "A final check: nonlinear computation\nWhy care about nonlinear computation? Because many real-world problems involve nonlinear relationships between inputs and outputs. For example, when a robot has to brake, if it is moving twice as fast, it needs to brake more than twice as hard. The relationship between speed and braking force is nonlinear. Hence, if a reservoir can help compute a nonlinear function of the input signal, it can be useful for a wider range of applications where there are complex relationships between the inputs and the desired outputs.\n\nSo how do we test nonlinear computation?\nLike the memory task, we collect the oscillator states over time. But here, instead of having our target as a delayed input signal, we use the nonlinear transformation of the current input signal as the target. In this case, the nonlinear transformation that we will use are:\n\nThe square of the input signal: \\(y(t) = [f(t)]^2\\)\nThe cube of the input signal: \\(y(t) = [f(t)]^3\\)\nA combination of the nonlinear transformations: \\(y(t) = \\sqrt{2}f(t) + [f(t)]^2 + 5[f(t)]^3\\)\n\n\ntrain_fraction = 0.7\nridge_alpha = 2\n\n# Square of the input signal\nu_target_1 = u_eval**2\n# Cube of the input signal\nu_target_2 = u_eval**3\n\n# Sum of nonlinear functions of the input signal\nu_target_sum = np.sqrt(2) * u_eval + u_eval**2 + 5*u_eval**3\n\nn_samples_1 = len(u_target_1)\nn_samples_2 = len(u_target_2)\nn_samples_sum = len(u_target_sum)\n\ntrain_size_1 = int(train_fraction * n_samples_1)\ntrain_size_2 = int(train_fraction * n_samples_2)\ntrain_size_sum = int(train_fraction * n_samples_sum)\n\ny_test_1, y_pred_1, score_1, _ = __fit__(X_eval, u_target_1, train_size_1, ridge_alpha)\ny_test_2, y_pred_2, score_2, _ = __fit__(X_eval, u_target_2, train_size_2, ridge_alpha)\ny_test_sum, y_pred_sum, score_sum, _ = __fit__(X_eval, u_target_sum, train_size_sum, ridge_alpha)\n\nfig, ax = plt.subplots(3, 1, figsize=(10, 15))\nax[0].plot(sol.t[washout + train_size_1 : washout + n_samples_1], y_test_1.T, label=\"Target: Input^2\", color=\"black\", linewidth=1.5)\nax[0].plot(sol.t[washout + train_size_1 : washout + n_samples_1], y_pred_1.T, label=\"Reconstruction\", color=\"tab:orange\")\nax[0].set_title(f\"Reconstruction of Input^2 $[f(t)^2]$ (R^2: {score_1:.3f})\")\nax[0].set_ylabel(\"Square of Input $[f(t)^2]$\")\nax[0].set_xlabel(\"Time (s)\")\nax[0].legend()\n\nax[1].plot(sol.t[washout + train_size_2 : washout + n_samples_2], y_test_2.T, label=\"Target: Input^3\", color=\"black\", linewidth=1.5)\nax[1].plot(sol.t[washout + train_size_2 : washout + n_samples_2], y_pred_2.T, label=\"Reconstruction\", color=\"tab:orange\")\nax[1].set_title(f\"Reconstruction of Input^3 $[f(t)^3]$ (R^2: {score_2:.3f})\")\nax[1].set_ylabel(\"Cube of Input $[f(t)^3]$\")\nax[1].set_xlabel(\"Time (s)\")\nax[1].legend()\n\nax[2].plot(sol.t[washout + train_size_sum : washout + n_samples_sum], y_test_sum.T, label=\"Target: sqrt(2)*Input + Input^2 + 5*Input^3\", color=\"black\", linewidth=1.5)\nax[2].plot(sol.t[washout + train_size_sum : washout + n_samples_sum], y_pred_sum.T, label=\"Reconstruction\", color=\"tab:orange\")\nax[2].set_title(f\"Reconstruction of Nonlinear function of Input (R^2: {score_sum:.3f})\")\nax[2].set_ylabel(\"$[\\\\sqrt{2}f(t) + f(t)^2 + 5f(t)^3]$\")\nax[2].set_xlabel(\"Time (s)\")\nax[2].legend()\n\nplt.show()\n\nR^2: -0.003/1.0\nR^2: 0.765/1.0\nR^2: 0.792/1.0\n\nHere is the catch: this system struggles with nonlinear computations. It can approximate the cube of the input signal, and even the nonlinear combination, to some extent. But we should be careful about what that means. Those target signals swing above and below zero, just like the original input signal. So the system is not being asked to do something completely different in shape. The square of the input is a harder test. Unlike the original signal, it is always positive.\nAnd these results are not too surprising once we look back at the model. This spring-mass system is linear: if the displacement doubles, the spring force doubles too. That makes it easier to understand, but it also limits the kinds of transformations it can provide.\nIf we want stronger nonlinear computation, we need to put some nonlinearity into the system itself, such as nonlinear springs or nonlinear damping. Oscillators with nonlinear spring behavior are often modeled as Duffing oscillators. They can be more expressive than linear oscillators, but they are also harder to analyze and control.",
+    "crumbs": [
+      "Experiments",
+      "Coupled Oscillator Reservoir"
+    ]
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#conclusion",
+    "href": "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html#conclusion",
+    "title": "Coupled Oscillator Reservoir",
+    "section": "Conclusion",
+    "text": "Conclusion\nLet’s summarize what we did in this experiment. We started with one oscillator, connected many oscillators together, and used their collective motion as a simple reservoir. For this toy setup, the reservoir states were useful for reconstructing the input, retaining delayed information, and making short-horizon predictions.\nBut the final nonlinear test also gave us an important warning: a purely linear oscillator reservoir cannot provide every kind of computation we might want. That limitation is not a dead end. It points directly to the next step: introduce nonlinearity and see how it changes the reservoir’s computational behavior.\nAnd that’s exactly what we will do in the next experiment. We will take this same setup and add nonlinear springs to see how that changes the reservoir’s ability to compute nonlinear functions of the input signal. Stay tuned!",
+    "crumbs": [
+      "Experiments",
+      "Coupled Oscillator Reservoir"
+    ]
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "Hi, I’m Apoorva.\nI’m a mechanical engineering PhD student interested in soft robotics, reservoir computing, neuromorphic systems, sensing, and control.\nA lot of my work sits at the intersection of physical systems and computation: how bodies move, how materials respond, how dynamics process information, and how robots can use these ideas to sense and act.\nThe Curious Notebook is where I collect small simulations, technical notes, and ideas I am trying to understand more deeply.\nSome pages are polished. Some are exploratory. The goal is to make the process of understanding visible without pretending every idea is finished."
   },
   {
     "objectID": "index.html",
@@ -63,11 +195,48 @@
     "text": "Explore\n\n\n\nDynamics That Compute\nToy simulations of physical systems that may act as reservoirs for computation.\n\n\n\n\nPosts\nShort notes, build logs, and standalone explanations."
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html",
+    "href": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html",
+    "title": "What is Reservoir Computing?",
     "section": "",
-    "text": "Hi, I’m Apoorva.\nI’m a mechanical engineering PhD student interested in soft robotics, reservoir computing, neuromorphic systems, sensing, and control.\nA lot of my work sits at the intersection of physical systems and computation: how bodies move, how materials respond, how dynamics process information, and how robots can use these ideas to sense and act.\nThe Curious Notebook is where I collect small simulations, technical notes, and ideas I am trying to understand more deeply.\nSome pages are polished. Some are exploratory. The goal is to make the process of understanding visible without pretending every idea is finished."
+    "text": "Imagine you have a pool of water and you throw a stone into it. The stone creates ripples. If you throw another stone before the first ripples die out, the new ripples interfere with the old ones. If you keep doing this, the surface of the water starts to carry a short history of what has happened to it.\nThat is the important part: the pool does not just react to the latest stone. Its current state also depends on the stones that came before.\nNow imagine you could observe the ripples carefully enough. Maybe the pattern on the surface could tell you something about the sequence of stones: how many were thrown, how far apart they were, or how strongly they disturbed the water. In a playful version of this idea, you might even imagine shaping the pool so the ripples bounce around in useful or surprising ways. This analogy is inspired by this video demonstration.\nReservoir computing starts from a similar intuition. We take a dynamical system, drive it with an input signal, observe how its internal state changes, and then learn a simple mapping from those observed states to a useful output.",
+    "crumbs": [
+      "Experiments",
+      "What is Reservoir Computing?"
+    ]
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html#the-reservoir-idea",
+    "href": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html#the-reservoir-idea",
+    "title": "What is Reservoir Computing?",
+    "section": "The Reservoir Idea",
+    "text": "The Reservoir Idea\nIn machine learning terms, reservoir computing is a framework for processing time-varying data. It is especially useful when the order of inputs matters, such as signals, sensor readings, speech, motion, or any sequence where the past can influence the present.\nThe “reservoir” is usually a recurrent system. In a common software version, this reservoir is a network of units connected to one another, including connections that loop back through time. These recurrent connections let the system develop memory: not perfect memory, but a fading trace of recent inputs.\nThe unusual part is that the reservoir itself is not usually trained. Its internal connections are often chosen randomly and then kept fixed. The input signal is fed into this fixed system, and the reservoir produces a rich, changing pattern of activity.\nInstead of adjusting all the internal connections, reservoir computing trains only a final output layer. This final layer is often called the readout.",
+    "crumbs": [
+      "Experiments",
+      "What is Reservoir Computing?"
+    ]
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html#a-more-technical-view",
+    "href": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html#a-more-technical-view",
+    "title": "What is Reservoir Computing?",
+    "section": "A More Technical View",
+    "text": "A More Technical View\nAt each time step, the reservoir receives an input. Its internal state updates based on three things:\n\nthe current input,\nthe previous reservoir state,\nthe fixed internal connections of the reservoir.\n\nBecause the reservoir has recurrent connections, its state can depend on recent history. Because the units are often nonlinear, the reservoir can transform the input into a more expressive representation.\nThe readout then learns how to combine these reservoir states to produce the desired output. This is usually done with a relatively simple regression method, such as linear regression or ridge regression.\nSo the training problem becomes much smaller than training a full recurrent neural network. We are not asking the whole system to learn from scratch. We are asking a fixed dynamic system to create useful features, and then training a readout to use those features.",
+    "crumbs": [
+      "Experiments",
+      "What is Reservoir Computing?"
+    ]
+  },
+  {
+    "objectID": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html#why-this-can-be-useful",
+    "href": "modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html#why-this-can-be-useful",
+    "title": "What is Reservoir Computing?",
+    "section": "Why This Can Be Useful",
+    "text": "Why This Can Be Useful\nReservoir computing is useful because it separates two jobs.\nThe reservoir handles dynamics, memory, and nonlinear transformation. The readout handles learning the specific task. This can make training faster and simpler than training every connection in a recurrent neural network.\nIt is also useful because the reservoir does not have to be a conventional neural network. In principle, any suitable dynamical system could act as a reservoir if it has enough memory, nonlinearity, and observable state. This is where the idea connects to physical reservoir computing: a physical system, or a simulated physical system, might transform input signals through its own natural dynamics.\nThat does not mean every complex-looking system is a good reservoir. A useful reservoir should preserve enough information about recent inputs, transform that information in helpful ways, and allow a readout to learn a task reliably. These are things we have to test, not assume.\nFor this notebook, reservoir computing is interesting because it gives us a careful way to ask a curious question:\n\nCan the dynamics of a system become part of the computation?\n\nThe rest of this module explores that question through toy models, simulations, and small experiments.",
+    "crumbs": [
+      "Experiments",
+      "What is Reservoir Computing?"
+    ]
   },
   {
     "objectID": "modules/dynamics_that_compute/index.html",
@@ -84,7 +253,7 @@
     "href": "modules/dynamics_that_compute/index.html#current-entries",
     "title": "Dynamics That Compute",
     "section": "Current entries",
-    "text": "Current entries\n\n\n\n\n\n\n\nCoupled Oscillator Reservoir\n\n\n\n\n\n\n\n\n\n\n\n\nWhat is Reservoir Computing?\n\n\nA general-audience introduction to reservoir computing, from ripples in water to fixed recurrent systems and trained readouts.\n\n\n\n\n\nNo matching items",
+    "text": "Current entries\n\n\n\n\n\n\n\nCoupled Oscillator Reservoir\n\n\nA notebook-derived article exploring oscillator dynamics and coupled oscillators as a possible reservoir-computing toy model.\n\n\n\n\n\n\n\n\n\nWhat is Reservoir Computing?\n\n\nAn approachable introduction to reservoir computing, readouts, memory, and why dynamical systems can be useful for processing sequences.\n\n\n\n\n\nNo matching items",
     "crumbs": [
       "Overview"
     ]
@@ -98,5 +267,117 @@
     "crumbs": [
       "Overview"
     ]
+  },
+  {
+    "objectID": "glossary/index.html",
+    "href": "glossary/index.html",
+    "title": "Glossary",
+    "section": "",
+    "text": "This glossary collects short explanations of terms that appear across the notebook.\nThe goal is not to replace textbooks or review papers. The goal is to make the notes easier to read without having to define every term from scratch each time."
+  },
+  {
+    "objectID": "glossary/index.html#reservoir-computing",
+    "href": "glossary/index.html#reservoir-computing",
+    "title": "Glossary",
+    "section": "Reservoir computing",
+    "text": "Reservoir computing\nReservoir computing is a machine learning approach where an input is passed through a fixed dynamical system called a reservoir. The reservoir transforms the input into a richer set of states. A simple readout is then trained to produce the desired output.\nThe reservoir itself is usually not trained."
+  },
+  {
+    "objectID": "glossary/index.html#physical-reservoir-computing",
+    "href": "glossary/index.html#physical-reservoir-computing",
+    "title": "Glossary",
+    "section": "Physical reservoir computing",
+    "text": "Physical reservoir computing\nPhysical reservoir computing uses a physical system as the reservoir.\nInstead of simulating all transformations in software, the input is applied to a real or simulated physical system. The system’s response becomes the reservoir state.\nExamples could include soft bodies, mechanical networks, fluids, optical systems, electronic circuits, or magnetic materials."
+  },
+  {
+    "objectID": "glossary/index.html#dynamical-system",
+    "href": "glossary/index.html#dynamical-system",
+    "title": "Glossary",
+    "section": "Dynamical system",
+    "text": "Dynamical system\nA dynamical system is a system whose state changes over time according to some rule.\nThe state could describe position, velocity, voltage, pressure, temperature, neural activity, or many other quantities. In this notebook, dynamical systems are usually interesting because their current state depends on both the current input and the recent past."
+  },
+  {
+    "objectID": "glossary/index.html#state",
+    "href": "glossary/index.html#state",
+    "title": "Glossary",
+    "section": "State",
+    "text": "State\nThe state of a system is the set of variables used to describe what the system is doing at a given time.\nFor a mechanical oscillator, the state might include position and velocity. For a neural reservoir, it might include neuron voltages or spike counts. For a soft body, it might include deformation at different points."
+  },
+  {
+    "objectID": "glossary/index.html#readout",
+    "href": "glossary/index.html#readout",
+    "title": "Glossary",
+    "section": "Readout",
+    "text": "Readout\nA readout is the trained part of a reservoir computer.\nThe reservoir transforms the input, and the readout learns how to map the reservoir states to the desired output. In many reservoir computing systems, the readout is a simple linear model."
+  },
+  {
+    "objectID": "glossary/index.html#memory",
+    "href": "glossary/index.html#memory",
+    "title": "Glossary",
+    "section": "Memory",
+    "text": "Memory\nMemory describes how much information about past inputs is still present in the current state of the system.\nA reservoir with useful memory does not only respond to the present input. It also carries traces of what happened recently."
+  },
+  {
+    "objectID": "glossary/index.html#nonlinearity",
+    "href": "glossary/index.html#nonlinearity",
+    "title": "Glossary",
+    "section": "Nonlinearity",
+    "text": "Nonlinearity\nA nonlinear system is one where the output is not simply proportional to the input.\nNonlinearity is important because it can create richer transformations of the input. In reservoir computing, useful computation often comes from a combination of memory and nonlinearity."
+  },
+  {
+    "objectID": "glossary/index.html#coupling",
+    "href": "glossary/index.html#coupling",
+    "title": "Glossary",
+    "section": "Coupling",
+    "text": "Coupling\nCoupling describes how different parts of a system influence each other.\nIn a network of oscillators, coupling determines how motion in one oscillator affects the others. In a soft body, coupling may come from material deformation. In a neural system, coupling may come from synaptic connections."
+  },
+  {
+    "objectID": "glossary/index.html#oscillator",
+    "href": "glossary/index.html#oscillator",
+    "title": "Glossary",
+    "section": "Oscillator",
+    "text": "Oscillator\nAn oscillator is a system that tends to repeat its motion over time.\nExamples include pendulums, springs, vibrating beams, electrical circuits, and biological rhythms. Oscillators are useful toy systems because their dynamics can show memory, resonance, synchronization, and phase relationships."
+  },
+  {
+    "objectID": "glossary/index.html#transient-response",
+    "href": "glossary/index.html#transient-response",
+    "title": "Glossary",
+    "section": "Transient response",
+    "text": "Transient response\nA transient response is the temporary behavior of a system after an input or disturbance.\nIn reservoir computing, transient responses are often useful because they contain information about how the system reacted to recent inputs."
+  },
+  {
+    "objectID": "glossary/index.html#high-dimensional-representation",
+    "href": "glossary/index.html#high-dimensional-representation",
+    "title": "Glossary",
+    "section": "High-dimensional representation",
+    "text": "High-dimensional representation\nA high-dimensional representation describes an input using many variables instead of just one or two.\nReservoirs are useful partly because they can turn a simple input signal into many internal states. This gives the readout more features to work with."
+  },
+  {
+    "objectID": "glossary/index.html#embodiment",
+    "href": "glossary/index.html#embodiment",
+    "title": "Glossary",
+    "section": "Embodiment",
+    "text": "Embodiment\nEmbodiment refers to the idea that a physical body can participate in sensing, control, or computation.\nIn robotics, this means the body is not just something to be controlled. Its material properties and dynamics can help shape behavior."
+  },
+  {
+    "objectID": "resources/references.html",
+    "href": "resources/references.html",
+    "title": "References",
+    "section": "",
+    "text": "TODO: Add papers, books, articles, and other sources when they are ready to cite."
+  },
+  {
+    "objectID": "resources/references.html#references",
+    "href": "resources/references.html#references",
+    "title": "References",
+    "section": "",
+    "text": "TODO: Add papers, books, articles, and other sources when they are ready to cite."
+  },
+  {
+    "objectID": "resources/references.html#citation-notes",
+    "href": "resources/references.html#citation-notes",
+    "title": "References",
+    "section": "Citation notes",
+    "text": "Citation notes\nTODO: Add notes about citation style or source organization."
   }
 ]

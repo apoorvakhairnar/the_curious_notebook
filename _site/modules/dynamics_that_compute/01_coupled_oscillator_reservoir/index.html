@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="A notebook-derived article exploring oscillator dynamics and coupled oscillators as a possible reservoir-computing toy model.">
 
 <title>Coupled Oscillator Reservoir – The Curious Notebook</title>
 <style>
@@ -23,6 +24,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -32,7 +68,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../../">
-<link href="../../../modules/dynamics_that_compute/index.html" rel="prev">
+<link href="../../../modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html" rel="prev">
 <script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/popper.min.js"></script>
@@ -75,6 +111,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../../styles.css">
 </head>
@@ -286,7 +351,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html">Examples</a></li><li class="breadcrumb-item"><a href="../../../modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html">Coupled Oscillator Reservoir</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html">Experiments</a></li><li class="breadcrumb-item"><a href="../../../modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html">Coupled Oscillator Reservoir</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -307,12 +372,18 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Examples</span></a>
+ <span class="menu-text">Experiments</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">What is Reservoir Computing?</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../../modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html" class="sidebar-item-text sidebar-link active">
@@ -326,18 +397,64 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-is-an-oscillator" id="toc-what-is-an-oscillator" class="nav-link active" data-scroll-target="#what-is-an-oscillator">What is an oscillator?</a>
+  <ul class="collapse">
+  <li><a href="#the-basic-model" id="toc-the-basic-model" class="nav-link" data-scroll-target="#the-basic-model">The basic model</a></li>
+  </ul></li>
+  <li><a href="#coupled-oscillators" id="toc-coupled-oscillators" class="nav-link" data-scroll-target="#coupled-oscillators">Coupled Oscillators</a>
+  <ul class="collapse">
+  <li><a href="#what-changes-when-we-connect-many-oscillators" id="toc-what-changes-when-we-connect-many-oscillators" class="nav-link" data-scroll-target="#what-changes-when-we-connect-many-oscillators">What changes when we connect many oscillators?</a></li>
+  <li><a href="#scaling-up-the-reservoir" id="toc-scaling-up-the-reservoir" class="nav-link" data-scroll-target="#scaling-up-the-reservoir">Scaling up the reservoir</a></li>
+  <li><a href="#reconstructing-the-input-signal-from-the-oscillator-states" id="toc-reconstructing-the-input-signal-from-the-oscillator-states" class="nav-link" data-scroll-target="#reconstructing-the-input-signal-from-the-oscillator-states">Reconstructing the input signal from the oscillator states</a>
+  <ul class="collapse">
+  <li><a href="#how-do-we-do-that" id="toc-how-do-we-do-that" class="nav-link" data-scroll-target="#how-do-we-do-that">How do we do that?</a></li>
+  </ul></li>
+  <li><a href="#a-harder-input-signal" id="toc-a-harder-input-signal" class="nav-link" data-scroll-target="#a-harder-input-signal">A harder input signal</a></li>
+  <li><a href="#tuning-the-reservoir-response" id="toc-tuning-the-reservoir-response" class="nav-link" data-scroll-target="#tuning-the-reservoir-response">Tuning the reservoir response</a></li>
+  <li><a href="#testing-memory" id="toc-testing-memory" class="nav-link" data-scroll-target="#testing-memory">Testing memory</a>
+  <ul class="collapse">
+  <li><a href="#why-do-we-care-about-memory" id="toc-why-do-we-care-about-memory" class="nav-link" data-scroll-target="#why-do-we-care-about-memory">Why do we care about memory?</a></li>
+  </ul></li>
+  <li><a href="#predicting-a-short-step-ahead" id="toc-predicting-a-short-step-ahead" class="nav-link" data-scroll-target="#predicting-a-short-step-ahead">Predicting a short step ahead</a>
+  <ul class="collapse">
+  <li><a href="#why-do-we-care-about-predicting-the-future" id="toc-why-do-we-care-about-predicting-the-future" class="nav-link" data-scroll-target="#why-do-we-care-about-predicting-the-future">Why do we care about predicting the future?</a></li>
+  <li><a href="#how-can-we-predict-the-future" id="toc-how-can-we-predict-the-future" class="nav-link" data-scroll-target="#how-can-we-predict-the-future">How can we predict the future?</a></li>
+  </ul></li>
+  <li><a href="#what-this-toy-reservoir-can-do" id="toc-what-this-toy-reservoir-can-do" class="nav-link" data-scroll-target="#what-this-toy-reservoir-can-do">What this toy reservoir can do</a></li>
+  <li><a href="#a-final-check-nonlinear-computation" id="toc-a-final-check-nonlinear-computation" class="nav-link" data-scroll-target="#a-final-check-nonlinear-computation">A final check: nonlinear computation</a>
+  <ul class="collapse">
+  <li><a href="#so-how-do-we-test-nonlinear-computation" id="toc-so-how-do-we-test-nonlinear-computation" class="nav-link" data-scroll-target="#so-how-do-we-test-nonlinear-computation">So how do we test nonlinear computation?</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html">Examples</a></li><li class="breadcrumb-item"><a href="../../../modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html">Coupled Oscillator Reservoir</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html">Experiments</a></li><li class="breadcrumb-item"><a href="../../../modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html">Coupled Oscillator Reservoir</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Coupled Oscillator Reservoir</h1>
-</div>
+  <div class="quarto-categories">
+    <div class="quarto-category">dynamics</div>
+    <div class="quarto-category">reservoir computing</div>
+    <div class="quarto-category">oscillators</div>
+    <div class="quarto-category">simulation</div>
+  </div>
+  </div>
 
+<div>
+  <div class="description">
+    A notebook-derived article exploring oscillator dynamics and coupled oscillators as a possible reservoir-computing toy model.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -352,10 +469,881 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="what-is-an-oscillator" class="level1">
+<h1>What is an oscillator?</h1>
+<p>An <strong>oscillator</strong> is something that moves back and forth around a resting point. A simple example is an object attached to a spring. Pull the object, let it go, and it does not just move once and stop. It keeps moving back and forth around its resting position.</p>
+<p>That back-and-forth motion is called <strong>oscillation</strong>. The resting position in the middle is called the <strong>equilibrium position</strong>. You can think of it as the place the object would like to return to, even though its momentum keeps carrying it past that point.</p>
+<p>In a perfectly ideal model, the object would keep oscillating forever. Real systems are less generous. Friction, air resistance, and other losses slowly drain energy from the motion, so the oscillation gradually fades. That gradual slowing is called <strong>damping</strong>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./simple_mass_spring.png" class="img-fluid figure-img"></p>
+<figcaption>Image of a mass-spring system</figcaption>
+</figure>
+</div>
+<section id="the-basic-model" class="level2">
+<h2 class="anchored" data-anchor-id="the-basic-model">The basic model</h2>
+<p>Here is the first mathematical version of the story. A <strong>harmonic oscillator</strong> describes an ideal oscillator with no damping and no external force pushing on it: <span class="math display">\[\frac{d^2x}{dt^2} + \omega^2 x = 0\]</span> Here, <span class="math inline">\(x\)</span> is the displacement from equilibrium, <span class="math inline">\(t\)</span> is time, and <span class="math inline">\(\omega=\sqrt{\frac{k}{m}}\)</span> is the angular frequency. The solution is sinusoidal motion: the familiar repeating wave we expect from a spring-like system.</p>
+<p>Now let’s make the model a little more realistic by adding damping: <span class="math display">\[\frac{d^2x}{dt^2} + \beta \frac{dx}{dt} + \omega^2 x = 0\]</span> where <span class="math inline">\(\beta\)</span> is the damping coefficient. Depending on this value, the oscillator may keep ringing for a while, return smoothly to rest, or settle as quickly as possible without overshooting.</p>
+<div id="500958c0" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.integrate <span class="im">import</span> solve_ivp</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> harmonic_oscillator(t, y, omega):</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    x, v <span class="op">=</span> y</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    dxdt <span class="op">=</span> v</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    dvdt <span class="op">=</span> <span class="op">-</span>omega<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> x</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [dxdt, dvdt]</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> damped_harmonic_oscillator(t, y, omega, beta):</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    x, v <span class="op">=</span> y</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    dxdt <span class="op">=</span> v</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    dvdt <span class="op">=</span> <span class="op">-</span>beta <span class="op">*</span> v <span class="op">-</span> omega<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> x</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [dxdt, dvdt]</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> <span class="fl">1.0</span>      <span class="co"># Amplitude</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">4</span> <span class="op">*</span> np.pi<span class="op">**</span><span class="dv">2</span>  <span class="co"># Spring constant</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="fl">2.5</span>      <span class="co"># Mass</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>omega <span class="op">=</span> np.sqrt(k <span class="op">/</span> m)  <span class="co"># Natural frequency</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>beta <span class="op">=</span> <span class="fl">0.5</span>  <span class="co"># Damping coefficient for underdamped case</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">2000</span>)  <span class="co"># Time array</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Initial condition</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> [A, <span class="dv">0</span>]  <span class="co"># Initial displacement and velocity</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the damped harmonic oscillator</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>x_ideal <span class="op">=</span> solve_ivp(harmonic_oscillator, (t[<span class="dv">0</span>], t[<span class="op">-</span><span class="dv">1</span>]), y, args<span class="op">=</span>(omega,), t_eval<span class="op">=</span>t).y[<span class="dv">0</span>]</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>x_under <span class="op">=</span> solve_ivp(damped_harmonic_oscillator, (t[<span class="dv">0</span>], t[<span class="op">-</span><span class="dv">1</span>]), y, args<span class="op">=</span>(omega, beta), t_eval<span class="op">=</span>t).y[<span class="dv">0</span>]</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].plot(t, x_ideal)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_title(<span class="st">'Ideal Harmonic Oscillator'</span>)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_xlabel(<span class="st">'Time (s)'</span>)</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_ylabel(<span class="st">'Displacement $x$'</span>)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].plot(t, x_under)</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="st">'Damped Harmonic Oscillator'</span>)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_xlabel(<span class="st">'Time (s)'</span>)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_ylabel(<span class="st">'Displacement $x$'</span>)</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">'Comparison of Motion of an Object in Harmonic Oscillators'</span>)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><img src="./notebook_outputs/cell-01-output-01.png" class="img-fluid"></p>
+<p>So far, we have only nudged the oscillator and watched what it does on its own. No one keeps pushing it after the initial start. That is called <strong>free oscillation</strong>.</p>
+<p>But what if we keep feeding the system an input while it moves? That gives us <strong>forced oscillation</strong>, where an outside signal keeps influencing the oscillator:</p>
+<p><span class="math display">\[\frac{d^2x}{dt^2} + \beta \frac{dx}{dt} + \omega^2 x = f(t)\]</span></p>
+<p>Here, <span class="math inline">\(f(t)\)</span> is the external driving force. You can think of it as the signal we are injecting into the system.</p>
+<div id="c8e4c92c" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forced_harmonic_oscillator(t, y, omega, beta, F0, omega_d):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    x, v <span class="op">=</span> y</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    dxdt <span class="op">=</span> v</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    Ft <span class="op">=</span> F0 <span class="op">*</span> np.sin(omega_d <span class="op">*</span> t)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    dvdt <span class="op">=</span> (Ft <span class="op">/</span> m) <span class="op">-</span> beta <span class="op">*</span> v <span class="op">-</span> omega<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> x</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [dxdt, dvdt]</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters for forced oscillator</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>F0 <span class="op">=</span> <span class="fl">2.5</span>  <span class="co"># Amplitude of driving force</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>omega_d <span class="op">=</span> np.pi  <span class="co"># Driving frequency</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the forced harmonic oscillator</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>x_forced <span class="op">=</span> solve_ivp(forced_harmonic_oscillator, (t[<span class="dv">0</span>], t[<span class="op">-</span><span class="dv">1</span>]), y, args<span class="op">=</span>(omega, beta, F0, omega_d), t_eval<span class="op">=</span>t).y[<span class="dv">0</span>]</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the forced harmonic oscillator</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>plt.plot(t, x_under, <span class="st">'--'</span>, label<span class="op">=</span><span class="st">'Free Damped Oscillation'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>plt.plot(t, x_forced, label<span class="op">=</span><span class="st">'Forced Oscillation'</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Forced Harmonic Oscillator'</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (s)'</span>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Displacement $x$'</span>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><img src="./notebook_outputs/cell-02-output-02.png" class="img-fluid"></p>
+<p>Now the oscillator has someone keeping it company. A periodic driving force can keep the motion going longer because it adds energy back into the system, partly replacing what damping removes. The exact motion depends on the frequency and amplitude of the driving force, along with the oscillator’s own natural frequency and damping.</p>
+<p>So far, that input has come from outside the oscillator. But here is the next twist: an oscillator can also be pushed around by another oscillator. If two moving systems are connected, the motion of one becomes part of the force felt by the other. That idea leads us naturally to <strong>coupled oscillators</strong>.</p>
+</section>
+</section>
+<section id="coupled-oscillators" class="level1">
+<h1>Coupled Oscillators</h1>
+<p>A coupled oscillator system contains two or more oscillators whose motions affect one another. The connection might be mechanical, like a spring between two masses, or it might come through electrical circuits, sound waves, or another shared medium.</p>
+<p>For now, let’s stick with a spring coupling like this one:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./coupled_oscillator.png" class="img-fluid figure-img"></p>
+<figcaption>Image of two coupled oscillators</figcaption>
+</figure>
+</div>
+<p>The important part is not just that there are two masses. It is that their motions are now linked. If one oscillator is displaced from equilibrium, it can tug on the other and make that one move too. The coupling gives energy and information a path through the system.</p>
+<p>Mathematically, this means the equations have to talk to each other as well. For two coupled oscillators, one simple model is: <span class="math display">\[\frac{d^2x_1}{dt^2} + \beta_1 \frac{dx_1}{dt} + \omega_1^2 x_1 = f_1(t) + c_{12} (x_2 - x_1) \]</span> <span class="math display">\[\frac{d^2x_2}{dt^2} + \beta_2 \frac{dx_2}{dt} + \omega_2^2 x_2 = f_2(t) + c_{12} (x_1 - x_2) \]</span> Here, <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> are the displacements of the two oscillators, <span class="math inline">\(c_{12}\)</span> is the coupling constant, <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> are damping coefficients, <span class="math inline">\(\omega_1\)</span> and <span class="math inline">\(\omega_2\)</span> are natural frequencies, and <span class="math inline">\(f_1(t)\)</span> and <span class="math inline">\(f_2(t)\)</span> are external driving forces. The new piece is the coupling term: each oscillator now feels the other one’s motion.</p>
+<div id="732d16bb" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coupled_oscillators(t, y, k, m, beta, c12, F0_1, F0_2, omega_d_1, omega_d_2):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    x1, v1, x2, v2 <span class="op">=</span> y</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    F1 <span class="op">=</span> F0_1 <span class="op">*</span> np.sin(omega_d_1 <span class="op">*</span> t)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    F2 <span class="op">=</span> F0_2 <span class="op">*</span> np.sin(omega_d_2 <span class="op">*</span> t)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    dx1dt <span class="op">=</span> v1</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    dv1dt <span class="op">=</span> <span class="op">-</span>beta <span class="op">*</span> v1 <span class="op">-</span> (k<span class="op">/</span>m) <span class="op">*</span> x1 <span class="op">+</span> c12 <span class="op">*</span> (x2 <span class="op">-</span> x1) <span class="op">+</span> F1 <span class="op">/</span> m</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    dx2dt <span class="op">=</span> v2</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    dv2dt <span class="op">=</span> <span class="op">-</span>beta <span class="op">*</span> v2 <span class="op">-</span> (k<span class="op">/</span>m) <span class="op">*</span> x2 <span class="op">+</span> c12 <span class="op">*</span> (x1 <span class="op">-</span> x2) <span class="op">+</span> F2 <span class="op">/</span> m</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [dx1dt, dv1dt, dx2dt, dv2dt]</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters for coupled oscillators</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="fl">1.0</span>  <span class="co"># Coupling strength</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="fl">1.0</span>  <span class="co"># Mass of each oscillator</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>omega <span class="op">=</span> np.sqrt(k <span class="op">/</span> m)  <span class="co"># Natural frequency of each oscillator</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>beta <span class="op">=</span> <span class="fl">0.1</span>  <span class="co"># Damping coefficient for underdamped case</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>c12 <span class="op">=</span> <span class="fl">0.5</span>  <span class="co"># Coupling constant</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>F0_1 <span class="op">=</span> <span class="fl">1.0</span>  <span class="co"># Amplitude of driving force for oscillator 1</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>F0_2 <span class="op">=</span> <span class="fl">0.0</span>  <span class="co"># Amplitude of driving force for oscillator 2</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>omega_d_1 <span class="op">=</span> np.pi  <span class="co"># Driving frequency for oscillator 1</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>omega_d_2 <span class="op">=</span> np.pi  <span class="co"># Driving frequency for oscillator 2</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> [<span class="fl">1.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>]  <span class="co"># Initial conditions: [x1, v1, x2, v2]</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>t_span <span class="op">=</span> (<span class="dv">0</span>, <span class="dv">20</span>)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>t_eval <span class="op">=</span> np.linspace(<span class="op">*</span>t_span, <span class="dv">1000</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Solve the coupled oscillators</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>sol <span class="op">=</span> solve_ivp(coupled_oscillators, t_span, y0, args<span class="op">=</span>(k, m, beta, c12, F0_1, F0_2, omega_d_1, omega_d_2), t_eval<span class="op">=</span>t_eval)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the coupled oscillators</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>plt.plot(sol.t, sol.y[<span class="dv">0</span>], label<span class="op">=</span><span class="st">'Oscillator 1 (Driven)'</span>)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>plt.plot(sol.t, sol.y[<span class="dv">2</span>], label<span class="op">=</span><span class="st">'Oscillator 2 (Undriven)'</span>)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Coupled Oscillators'</span>)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (s)'</span>)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Displacement $x_i$'</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><img src="./notebook_outputs/cell-03-output-03.png" class="img-fluid"></p>
+<p>This plot is our first glimpse of a small oscillator network in motion. Even though only the first oscillator is directly driven, the other oscillator starts moving because the coupling passes that influence through the system. The traces are not identical, which is exactly the interesting part: the same input is being reshaped into several different responses.</p>
+<p>This is still a rough version of the idea, though. The parameters are mostly chosen just to see the network move. Next, let’s make the setup feel a little more like a reservoir we can actually use.</p>
+<section id="what-changes-when-we-connect-many-oscillators" class="level2">
+<h2 class="anchored" data-anchor-id="what-changes-when-we-connect-many-oscillators">What changes when we connect many oscillators?</h2>
+<p>Two oscillators are already interesting. But what happens if we connect many of them? Now a signal does not just move back and forth in one place. It spreads, mixes, fades, and reappears across the whole system.</p>
+<p>That is the opening we need for <strong>physical reservoir computing</strong>. Under the right conditions, a network of coupled oscillators can act like a physical reservoir: the input signal creates a rich pattern of internal motion, and a simple output model can learn to use that pattern for tasks such as signal processing, pattern recognition, or other machine-learning-style problems.</p>
+<p>If we have <span class="math inline">\(N\)</span> oscillators, each oscillator has its own displacement, damping, natural frequency, input, and connections to the others. One way to write the motion of the <span class="math inline">\(i^{th}\)</span> oscillator is:</p>
+<p><span class="math display">\[\frac{d^2x_i}{dt^2} + \beta_i \frac{dx_i}{dt} + \omega_i^2 x_i = f_i(t) + \sum_{j=1}^{N} c_{ij} (x_j - x_i)\]</span></p>
+<p>Here, <span class="math inline">\(x_i\)</span> is the displacement, <span class="math inline">\(\beta_i\)</span> is the damping coefficient, <span class="math inline">\(\omega_i\)</span> is the natural frequency, <span class="math inline">\(f_i(t)\)</span> is the external driving force, and <span class="math inline">\(c_{ij}\)</span> is the coupling strength between oscillator <span class="math inline">\(i\)</span> and oscillator <span class="math inline">\(j\)</span>. The sum is the important part: it gathers the influence of the rest of the network on oscillator <span class="math inline">\(i\)</span>.</p>
+<div id="4329707c" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coupled_oscillators(t, y, k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="bu">len</span>(y) <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> y[:N]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    v <span class="op">=</span> y[N:]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    dxdt <span class="op">=</span> v</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    dvdt <span class="op">=</span> np.zeros(N)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        Ft <span class="op">=</span> F_matrix[i] <span class="op">*</span> np.sin(omega_d <span class="op">*</span> t)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        coupling_term <span class="op">=</span> <span class="bu">sum</span>(c_matrix[i, j] <span class="op">*</span> (x[j] <span class="op">-</span> x[i]) <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(N))</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        dvdt[i] <span class="op">=</span> <span class="op">-</span> beta_matrix[i] <span class="op">*</span> v[i] <span class="op">-</span> (k_matrix[i, i] <span class="op">/</span> m) <span class="op">*</span> x[i] <span class="op">+</span> coupling_term <span class="op">+</span> Ft <span class="op">/</span> m</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.concatenate([dxdt, dvdt])</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters for a larger network of coupled oscillators</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">5</span>  <span class="co"># Number of oscillators</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>k_matrix <span class="op">=</span> np.full((N, N), <span class="fl">0.5</span>)  <span class="co"># Spring constant matrix</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="fl">1.0</span>  <span class="co"># Mass of each oscillator</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>beta_matrix <span class="op">=</span> np.full(N, <span class="fl">0.1</span>)  <span class="co"># Damping coefficients</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>F0 <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>omega_d <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> np.pi  <span class="co"># Driving frequency</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>seed <span class="op">=</span> <span class="dv">56</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>F_matrix <span class="op">=</span> np.zeros(N)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>F_matrix[<span class="dv">0</span>:<span class="dv">1</span>] <span class="op">=</span> <span class="fl">1.0</span>  <span class="co"># Only the first oscillator is driven, others are passive</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co"># F_matrix = np.random.rand(N)# * 2 * np.pi  # Random driving frequencies</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>seed <span class="op">=</span> <span class="dv">268</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>c_matrix <span class="op">=</span> rng.uniform(<span class="dv">0</span>, <span class="dv">10</span>, (N, N))  <span class="co"># Random coupling strengths</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> np.concatenate([np.ones(N), np.zeros(N)])  <span class="co"># Initial conditions: [x1, x2, ..., v1, v2, ...]</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>t_span <span class="op">=</span> (<span class="dv">0</span>, <span class="dv">20</span>)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>t_eval <span class="op">=</span> np.linspace(<span class="op">*</span>t_span, <span class="dv">1000</span>)</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Solve the larger network of coupled oscillators</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>sol <span class="op">=</span> solve_ivp(coupled_oscillators, t_span, y0, args<span class="op">=</span>(k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix), t_eval<span class="op">=</span>t_eval)</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the larger network of coupled oscillators</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    plt.plot(sol.t, sol.y[i], label<span class="op">=</span><span class="ss">f'Oscillator </span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Larger Network of Coupled Oscillators'</span>)</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time (s)'</span>)</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Displacement $x_i$'</span>)</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><img src="./notebook_outputs/cell-04-output-04.png" class="img-fluid"></p>
+</section>
+<section id="scaling-up-the-reservoir" class="level2">
+<h2 class="anchored" data-anchor-id="scaling-up-the-reservoir">Scaling up the reservoir</h2>
+<p>The previous example was deliberately small and a bit rough: only a few oscillators, with randomly chosen parameters. Now let’s make the setup feel more like a reservoir. We will use more oscillators, choose the parameters more carefully, and drive the system with a shared input signal.</p>
+<p>In this version, the input enters through the first oscillator. The others do not receive it directly; they feel it through the coupling. That is exactly what we want to watch: how does one signal ripple through the system and turn into many different internal responses?</p>
+<div id="a6ecb7e7" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> drive_signal(t, omega_d):</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.sin(omega_d <span class="op">*</span> t)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coupled_oscillators(t, y, k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix):</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="bu">len</span>(y) <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> y[:N]</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    v <span class="op">=</span> y[N:]</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    dxdt <span class="op">=</span> v</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    u <span class="op">=</span> drive_signal(t, omega_d)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    row_sums <span class="op">=</span> c_matrix.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    coupling_term <span class="op">=</span> c_matrix <span class="op">@</span> x <span class="op">-</span> row_sums <span class="op">*</span> x  <span class="co"># Efficient coupling term calculation</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    dvdt <span class="op">=</span> <span class="op">-</span>beta_matrix <span class="op">*</span> v <span class="op">-</span> omega_n<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> x <span class="op">+</span> coupling_term <span class="op">+</span> (F_matrix <span class="op">*</span> F0 <span class="op">*</span> u) <span class="op">/</span> m</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.concatenate([dxdt, dvdt])</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_coupling_matrix(N, density, coupling_strength, omega_n, rng):</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> rng.random((N, N)) <span class="op">&lt;</span> density</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> np.triu(A, <span class="dv">1</span>)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> A <span class="op">+</span> A.T</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    weights <span class="op">=</span> rng.uniform(<span class="fl">0.5</span>, <span class="fl">1.5</span>, size<span class="op">=</span>(N, N))</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    c_matrix <span class="op">=</span> A <span class="op">*</span> weights</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    row_sums <span class="op">=</span> c_matrix.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    max_row_sum <span class="op">=</span> row_sums.<span class="bu">max</span>()</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> max_row_sum <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>        target_row_sum <span class="op">=</span> coupling_strength <span class="op">*</span> np.median(omega_n<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>        c_matrix <span class="op">*=</span> target_row_sum <span class="op">/</span> max_row_sum</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    np.fill_diagonal(c_matrix, <span class="fl">0.0</span>)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> c_matrix</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Tuned parameters for a bounded, diverse reservoir response</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">128</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>seed <span class="op">=</span> <span class="dv">56</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed)</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>zeta_matrix <span class="op">=</span> rng.uniform(<span class="fl">0.3</span>, <span class="fl">1.0</span>, N)</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>omega_n <span class="op">=</span> np.exp(rng.uniform(np.log(<span class="fl">0.3</span>), np.log(<span class="fl">5.0</span>), N))</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>k_matrix <span class="op">=</span> np.diag(m <span class="op">*</span> omega_n<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>beta_matrix <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> m <span class="op">*</span> zeta_matrix <span class="op">*</span> omega_n</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>omega_d <span class="op">=</span> <span class="fl">1.0</span>  <span class="co"># Driving frequency</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>F0 <span class="op">=</span> <span class="fl">2.5</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>F_matrix <span class="op">=</span> np.zeros(N)</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>input_nodes <span class="op">=</span> np.array([<span class="dv">0</span>])  <span class="co"># Only the first oscillator is driven</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>readout_nodes <span class="op">=</span> np.arange(<span class="dv">1</span>, N)  <span class="co"># All oscillators are read out except the first one</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>F_matrix[input_nodes] <span class="op">=</span> <span class="fl">1.0</span>  <span class="co"># Only the first oscillator is driven, others are passive</span></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>seed <span class="op">=</span> <span class="dv">268</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed)</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>c_matrix <span class="op">=</span> make_coupling_matrix(N, density<span class="op">=</span><span class="fl">0.1</span>, coupling_strength<span class="op">=</span><span class="dv">10</span>, omega_n<span class="op">=</span>omega_n, rng<span class="op">=</span>rng)</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> <span class="fl">0.01</span> <span class="op">*</span> rng.standard_normal(<span class="dv">2</span> <span class="op">*</span> N)</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>t_span <span class="op">=</span> (<span class="fl">0.0</span>, <span class="fl">100.0</span>)</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>t_eval <span class="op">=</span> np.linspace(<span class="op">*</span>t_span, <span class="dv">5000</span>)</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>sol <span class="op">=</span> solve_ivp(</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>    coupled_oscillators,</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>    t_span,</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>    y0,</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>(k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix),</span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>    t_eval<span class="op">=</span>t_eval,</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>    max_step<span class="op">=</span><span class="fl">0.05</span>,</span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>    rtol<span class="op">=</span><span class="fl">1e-6</span>,</span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>    atol<span class="op">=</span><span class="fl">1e-8</span>,</span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a> )</span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sol.success, sol.message</span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>X_sol <span class="op">=</span> sol.y[:N].T</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> X_sol[:, readout_nodes]  <span class="co"># Read out only the passive oscillators</span></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>input_trace <span class="op">=</span> drive_signal(sol.t, omega_d)</span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">5</span>))</span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">12</span>):</span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>    ax.plot(sol.t, X[:, i], label<span class="op">=</span><span class="ss">f"Oscillator </span><span class="sc">{</span>i <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss">"</span>, alpha<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Tuned coupled oscillator reservoir"</span>)</span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Time (s)"</span>)</span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Displacement $x_i$"</span>)</span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>ax.legend(ncol<span class="op">=</span><span class="dv">3</span>, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><img src="./notebook_outputs/cell-05-output-05.png" class="img-fluid"></p>
+</section>
+<section id="reconstructing-the-input-signal-from-the-oscillator-states" class="level2">
+<h2 class="anchored" data-anchor-id="reconstructing-the-input-signal-from-the-oscillator-states">Reconstructing the input signal from the oscillator states</h2>
+<p>Now the traces are not identical copies of the input. Each oscillator responds with its own amplitude and phase, giving us several related views of the same driving signal.</p>
+<p>So here is the test: if we look only at these oscillator states, can we reconstruct the signal that originally drove the system?</p>
+<section id="how-do-we-do-that" class="level3">
+<h3 class="anchored" data-anchor-id="how-do-we-do-that">How do we do that?</h3>
+<p>We are going to collect the states that is, the displacements of all the oscillators in the system from 0 to 100 seconds. We will use 70% of that data to obtain the mapping from the oscillator states to the input signal, and then we will test how well that mapping works on the remaining 30% of the data. If the reservoir is doing a good job, then we should be able to reconstruct the input signal from the internal states with high accuracy.</p>
+<div id="d3a55a63" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> r2_score, mean_squared_error</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> __fit__(X_eval, u_eval, train_size, ridge_alpha):</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    X_train <span class="op">=</span> X_eval[:train_size]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    X_test <span class="op">=</span> X_eval[train_size:]</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    y_train <span class="op">=</span> u_eval[:train_size]</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    y_train <span class="op">=</span> y_train.T</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    y_test <span class="op">=</span> u_eval[train_size:]</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    y_test <span class="op">=</span> y_test.T</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    X_train_aug <span class="op">=</span> np.column_stack([X_train, np.ones(<span class="bu">len</span>(X_train))]).T</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    X_test_aug <span class="op">=</span> np.column_stack([X_test, np.ones(<span class="bu">len</span>(X_test))]).T</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    ridge <span class="op">=</span> np.matmul(X_train_aug, X_train_aug.T) <span class="op">+</span> ridge_alpha <span class="op">*</span> np.identity(X_train_aug.shape[<span class="dv">0</span>])</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    ridge_inv <span class="op">=</span> np.linalg.inv(ridge)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    yX <span class="op">=</span> np.matmul(y_train, X_train_aug.T)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    Wout <span class="op">=</span> np.matmul(yX, ridge_inv.T)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    y_pred <span class="op">=</span> Wout <span class="op">@</span> X_test_aug</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    baseline_pred <span class="op">=</span> np.full_like(y_test, y_train.mean())</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    score <span class="op">=</span> r2_score(y_true<span class="op">=</span>y_test.T, y_pred<span class="op">=</span>y_pred.T)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"R^2: </span><span class="sc">{</span>score<span class="sc">:.3f}</span><span class="ss">/1.0"</span>)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y_test, y_pred, score, Wout</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Delayed input reconstruction on the tuned reservoir states</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>washout <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>delay_steps <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>train_fraction <span class="op">=</span> <span class="fl">0.7</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>ridge_alpha <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Task: Delayed input reconstruction (delay = </span><span class="sc">{</span>delay_steps <span class="op">*</span> (t_eval[<span class="dv">1</span>] <span class="op">-</span> t_eval[<span class="dv">0</span>])<span class="sc">:.3f}</span><span class="ss"> s)"</span>)</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>X_eval <span class="op">=</span> X[washout:]</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>u_eval <span class="op">=</span> input_trace[washout:]</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>u_eval <span class="op">=</span> u_eval[:, np.newaxis]</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> delay_steps <span class="op">&gt;=</span> <span class="bu">len</span>(u_eval):</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"delay_steps is too large for the available time series length."</span>)</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>X_delayed <span class="op">=</span> X_eval[delay_steps:]</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>u_target <span class="op">=</span> u_eval[:<span class="op">-</span>delay_steps] <span class="cf">if</span> delay_steps <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> u_eval</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>n_samples <span class="op">=</span> <span class="bu">len</span>(u_target)</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>train_size <span class="op">=</span> <span class="bu">int</span>(train_fraction <span class="op">*</span> n_samples)</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>y_test, y_pred, score, _ <span class="op">=</span> __fit__(X_delayed, u_target, train_size, ridge_alpha)</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>test_time <span class="op">=</span> sol.t[washout <span class="op">+</span> delay_steps <span class="op">+</span> train_size : washout <span class="op">+</span> delay_steps <span class="op">+</span> n_samples]</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>ax.plot(test_time, y_test.T, label<span class="op">=</span><span class="st">"Input"</span>, color<span class="op">=</span><span class="st">"black"</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>ax.plot(test_time, y_pred.T, label<span class="op">=</span><span class="st">"Reconstruction"</span>, color<span class="op">=</span><span class="st">"tab:orange"</span>)</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Input reconstruction using Oscillator output"</span>)</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Input"</span>)</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Time (s)"</span>)</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre class="text"><code>Task: Delayed input reconstruction (delay = 0.000 s)
+R^2: 0.989/1.0</code></pre>
+<p><img src="./notebook_outputs/cell-06-output-06.png" class="img-fluid"></p>
+<p>Okay, great! This system can reconstruct a simple sine wave input signal. Quantitavely, this reconstuction has a score of 0.989 out of 1. That is pretty good, even though not perfect.</p>
+<p>But we should not celebrate too quickly. A single sine wave is a very simple signal as it keeps repeating periodically. It is not a real test of the system’s ability to process complex information. To really see the potential of this reservoir, we need to try it with more complicated inputs and more challenging tasks.</p>
+</section>
+</section>
+<section id="a-harder-input-signal" class="level2">
+<h2 class="anchored" data-anchor-id="a-harder-input-signal">A harder input signal</h2>
+<p>This time, let’s dirve the first oscillator with an input signal that is a sum of 3 sine waves with different frequencies. This is a more complex signal that contains more information than a single sine wave and also does not repeat.</p>
+<div id="d8a60d8f" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> drive_signal(t, omega_d):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> np.asarray(t)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        np.sin(omega_d <span class="op">*</span> t) <span class="op">+</span> <span class="fl">0.65</span> <span class="op">*</span> np.sin(np.sqrt(<span class="dv">2</span>) <span class="op">*</span> omega_d <span class="op">*</span> t <span class="op">+</span> <span class="fl">0.6</span>) <span class="op">+</span> <span class="fl">0.4</span> <span class="op">*</span> np.sin(np.sqrt(<span class="dv">3</span>) <span class="op">*</span> omega_d <span class="op">*</span> t <span class="op">+</span> <span class="fl">1.2</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>sol <span class="op">=</span> solve_ivp(</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    coupled_oscillators,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    t_span,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    y0,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>(k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix),</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    t_eval<span class="op">=</span>t_eval,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    max_step<span class="op">=</span><span class="fl">0.05</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    rtol<span class="op">=</span><span class="fl">1e-6</span>,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    atol<span class="op">=</span><span class="fl">1e-8</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a> )</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sol.success, sol.message</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>X_sol <span class="op">=</span> sol.y[:N].T</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> X_sol[:, readout_nodes]  <span class="co"># Read out only the passive oscillators</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>input_trace <span class="op">=</span> drive_signal(sol.t, omega_d)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Input reconstruction on the tuned reservoir states</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>washout <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>delay_steps <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>train_fraction <span class="op">=</span> <span class="fl">0.7</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>ridge_alpha <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Task: Delayed input reconstruction (delay = </span><span class="sc">{</span>delay_steps <span class="op">*</span> (t_eval[<span class="dv">1</span>] <span class="op">-</span> t_eval[<span class="dv">0</span>])<span class="sc">:.3f}</span><span class="ss"> s)"</span>)</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>X_eval <span class="op">=</span> X[washout:]</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>u_eval <span class="op">=</span> input_trace[washout:]</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>u_eval <span class="op">=</span> u_eval[:, np.newaxis]</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> delay_steps <span class="op">&gt;=</span> <span class="bu">len</span>(u_eval):</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"delay_steps is too large for the available time series length."</span>)</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>X_delayed <span class="op">=</span> X_eval[delay_steps:]</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>u_target <span class="op">=</span> u_eval[:<span class="op">-</span>delay_steps] <span class="cf">if</span> delay_steps <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> u_eval</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>n_samples <span class="op">=</span> <span class="bu">len</span>(u_target)</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>train_size <span class="op">=</span> <span class="bu">int</span>(train_fraction <span class="op">*</span> n_samples)</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>y_test, y_pred, score, _ <span class="op">=</span> __fit__(X_delayed, u_target, train_size, ridge_alpha)</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>test_time <span class="op">=</span> sol.t[washout <span class="op">+</span> delay_steps <span class="op">+</span> train_size : washout <span class="op">+</span> delay_steps <span class="op">+</span> n_samples]</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">10</span>))</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].plot(sol.t, input_trace, label<span class="op">=</span><span class="st">"Input"</span>, color<span class="op">=</span><span class="st">"black"</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_title(<span class="st">"Input signal"</span>)</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_ylabel(<span class="st">"Input"</span>)</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_xlabel(<span class="st">"Time (s)"</span>)</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].plot(test_time, y_test.T, label<span class="op">=</span><span class="st">"Input"</span>, color<span class="op">=</span><span class="st">"black"</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].plot(test_time, y_pred.T, label<span class="op">=</span><span class="st">"Reconstruction"</span>, color<span class="op">=</span><span class="st">"tab:orange"</span>)</span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="st">"Input reconstruction using Oscillator output"</span>)</span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_ylabel(<span class="st">"Input"</span>)</span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_xlabel(<span class="st">"Time (s)"</span>)</span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].legend()</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre class="text"><code>Task: Delayed input reconstruction (delay = 0.000 s)
+R^2: 0.736/1.0</code></pre>
+<p><img src="./notebook_outputs/cell-07-output-07.png" class="img-fluid"></p>
+<p>This reconstruction is not where we want it to be. That is useful information, not a failure. It tells us that this particular reservoir setup is not capturing enough of the signal structure for the output model to recover it well.</p>
+<p>So let’s tune the system and see what changes.</p>
+</section>
+<section id="tuning-the-reservoir-response" class="level2">
+<h2 class="anchored" data-anchor-id="tuning-the-reservoir-response">Tuning the reservoir response</h2>
+<p>I am going to increase the coupling strength, the driving force, and the driving frequency, then compare the result.</p>
+<div id="8b63c09e" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> drive_signal(t, omega_d):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> np.asarray(t)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>        np.sin(omega_d <span class="op">*</span> t) <span class="op">+</span> <span class="fl">0.65</span> <span class="op">*</span> np.sin(np.sqrt(<span class="dv">2</span>) <span class="op">*</span> omega_d <span class="op">*</span> t <span class="op">+</span> <span class="fl">0.6</span>) <span class="op">+</span> <span class="fl">0.4</span> <span class="op">*</span> np.sin(np.sqrt(<span class="dv">3</span>) <span class="op">*</span> omega_d <span class="op">*</span> t <span class="op">+</span> <span class="fl">1.2</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Tuned parameters for a bounded, diverse reservoir response</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">128</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>seed <span class="op">=</span> <span class="dv">56</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>zeta_matrix <span class="op">=</span> rng.uniform(<span class="fl">0.3</span>, <span class="fl">1.0</span>, N)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>omega_n <span class="op">=</span> np.exp(rng.uniform(np.log(<span class="fl">0.3</span>), np.log(<span class="fl">5.0</span>), N))</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>k_matrix <span class="op">=</span> np.diag(m <span class="op">*</span> omega_n<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>beta_matrix <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> m <span class="op">*</span> zeta_matrix <span class="op">*</span> omega_n</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>omega_d <span class="op">=</span> <span class="fl">2.0</span>  <span class="co"># Driving frequency</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>F0 <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>F_matrix <span class="op">=</span> np.zeros(N)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>input_nodes <span class="op">=</span> np.array([<span class="dv">0</span>])  <span class="co"># Only the first oscillator is driven</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>readout_nodes <span class="op">=</span> np.arange(<span class="dv">1</span>, N)  <span class="co"># All oscillators are read out except the first one</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>F_matrix[input_nodes] <span class="op">=</span> <span class="fl">1.0</span>  <span class="co"># Only the first oscillator is driven, others are passive</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>seed <span class="op">=</span> <span class="dv">268</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed)</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>c_matrix <span class="op">=</span> make_coupling_matrix(N, density<span class="op">=</span><span class="fl">0.1</span>, coupling_strength<span class="op">=</span><span class="dv">20</span>, omega_n<span class="op">=</span>omega_n, rng<span class="op">=</span>rng)</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> <span class="fl">0.01</span> <span class="op">*</span> rng.standard_normal(<span class="dv">2</span> <span class="op">*</span> N)</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>t_span <span class="op">=</span> (<span class="fl">0.0</span>, <span class="fl">100.0</span>)</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>t_eval <span class="op">=</span> np.linspace(<span class="op">*</span>t_span, <span class="dv">5000</span>)</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>sol <span class="op">=</span> solve_ivp(</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>    coupled_oscillators,</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>    t_span,</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>    y0,</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>    args<span class="op">=</span>(k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix),</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>    t_eval<span class="op">=</span>t_eval,</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>    max_step<span class="op">=</span><span class="fl">0.05</span>,</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>    rtol<span class="op">=</span><span class="fl">1e-6</span>,</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>    atol<span class="op">=</span><span class="fl">1e-8</span>,</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a> )</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sol.success, sol.message</span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>X_sol <span class="op">=</span> sol.y[:N].T</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> X_sol[:, readout_nodes]  <span class="co"># Read out only the passive oscillators</span></span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>input_trace <span class="op">=</span> drive_signal(sol.t, omega_d)</span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Input reconstruction on the tuned reservoir states</span></span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>washout <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>delay_steps <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>train_fraction <span class="op">=</span> <span class="fl">0.7</span></span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>ridge_alpha <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Task: Delayed input reconstruction (delay = </span><span class="sc">{</span>delay_steps <span class="op">*</span> (t_eval[<span class="dv">1</span>] <span class="op">-</span> t_eval[<span class="dv">0</span>])<span class="sc">:.3f}</span><span class="ss"> s)"</span>)</span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>X_eval <span class="op">=</span> X[washout:]</span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>u_eval <span class="op">=</span> input_trace[washout:]</span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>u_eval <span class="op">=</span> u_eval[:, np.newaxis]</span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> delay_steps <span class="op">&gt;=</span> <span class="bu">len</span>(u_eval):</span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"delay_steps is too large for the available time series length."</span>)</span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>X_delayed <span class="op">=</span> X_eval[delay_steps:]</span>
+<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a>u_target <span class="op">=</span> u_eval[:<span class="op">-</span>delay_steps] <span class="cf">if</span> delay_steps <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> u_eval</span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>n_samples <span class="op">=</span> <span class="bu">len</span>(u_target)</span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>train_size <span class="op">=</span> <span class="bu">int</span>(train_fraction <span class="op">*</span> n_samples)</span>
+<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>y_test, y_pred, score, _ <span class="op">=</span> __fit__(X_delayed, u_target, train_size, ridge_alpha)</span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>test_time <span class="op">=</span> sol.t[washout <span class="op">+</span> delay_steps <span class="op">+</span> train_size : washout <span class="op">+</span> delay_steps <span class="op">+</span> n_samples]</span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">10</span>))</span>
+<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].plot(sol.t, input_trace, label<span class="op">=</span><span class="st">"Input"</span>, color<span class="op">=</span><span class="st">"black"</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_title(<span class="st">"Input signal"</span>)</span>
+<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_ylabel(<span class="st">"Input"</span>)</span>
+<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_xlabel(<span class="st">"Time (s)"</span>)</span>
+<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].plot(test_time, y_test.T, label<span class="op">=</span><span class="st">"Input"</span>, color<span class="op">=</span><span class="st">"black"</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].plot(test_time, y_pred.T, label<span class="op">=</span><span class="st">"Reconstruction"</span>, color<span class="op">=</span><span class="st">"tab:orange"</span>)</span>
+<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="st">"Input reconstruction using Oscillator output"</span>)</span>
+<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_ylabel(<span class="st">"Input"</span>)</span>
+<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_xlabel(<span class="st">"Time (s)"</span>)</span>
+<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].legend()</span>
+<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre class="text"><code>Task: Delayed input reconstruction (delay = 0.000 s)
+R^2: 0.996/1.0</code></pre>
+<p><img src="./notebook_outputs/cell-08-output-08.png" class="img-fluid"></p>
+<p>Great! The reconstruction is much better now, with a score of 0.998 out of 1. That is a significant improvement, showing that the reservoir can capture more of the signal structure when we adjust the parameters.</p>
+<p>So far, we have been asking the reservoir about the present: can the current state tell us what the input is right now?</p>
+<p>But the more interesting question is about memory. Does the system carry traces of what happened a little while ago? Let’s test that by asking whether the output model can reconstruct the input after a delay.</p>
+</section>
+<section id="testing-memory" class="level2">
+<h2 class="anchored" data-anchor-id="testing-memory">Testing memory</h2>
+<p>Here, we follow the same procedure as before, but this time we obtain a mapping from the current oscillator states to the input signal from a few seconds ago.</p>
+<p>I am going to set the delay to 1000 steps, which is about 20 seconds in this simulation. That means the output model will try to reconstruct the input signal from 20 seconds ago, using only the current state of the oscillator network.</p>
+<div id="ee447c66" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Input reconstruction on the tuned reservoir states</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>delay_steps <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Task: Delayed input reconstruction (delay = </span><span class="sc">{</span>delay_steps <span class="op">*</span> (t_eval[<span class="dv">1</span>] <span class="op">-</span> t_eval[<span class="dv">0</span>])<span class="sc">:.3f}</span><span class="ss"> s)"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> delay_steps <span class="op">&gt;=</span> <span class="bu">len</span>(u_eval):</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"delay_steps is too large for the available time series length."</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>X_delayed <span class="op">=</span> X_eval[delay_steps:]</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>u_target <span class="op">=</span> u_eval[:<span class="op">-</span>delay_steps] <span class="cf">if</span> delay_steps <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> u_eval</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>n_samples <span class="op">=</span> <span class="bu">len</span>(u_target)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>train_size <span class="op">=</span> <span class="bu">int</span>(train_fraction <span class="op">*</span> n_samples)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>y_test, y_pred, score, _ <span class="op">=</span> __fit__(X_delayed, u_target, train_size, ridge_alpha)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>test_time <span class="op">=</span> sol.t[washout <span class="op">+</span> delay_steps <span class="op">+</span> train_size : washout <span class="op">+</span> delay_steps <span class="op">+</span> n_samples]</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>ax.plot(test_time, y_test.T, label<span class="op">=</span><span class="ss">f"Delayed Input by </span><span class="sc">{</span>delay_steps <span class="op">*</span> (t_eval[<span class="dv">1</span>] <span class="op">-</span> t_eval[<span class="dv">0</span>])<span class="sc">:.3f}</span><span class="ss"> s"</span>, color<span class="op">=</span><span class="st">"black"</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>ax.plot(test_time, y_pred.T, label<span class="op">=</span><span class="st">"Reconstruction"</span>, color<span class="op">=</span><span class="st">"tab:orange"</span>)</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Delayed Input reconstruction using Oscillator output"</span>)</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Delayed Input"</span>)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Time (s)"</span>)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre class="text"><code>Task: Delayed input reconstruction (delay = 20.004 s)
+R^2: 0.993/1.0</code></pre>
+<p><img src="./notebook_outputs/cell-09-output-09.png" class="img-fluid"></p>
+<p>Wonderful! This system is able to reconstruct a delayed input signal very well for this input and parameter setting. This means that the reservoir is not just reacting to the current input, but also retaining information about recent input history.</p>
+<section id="why-do-we-care-about-memory" class="level3">
+<h3 class="anchored" data-anchor-id="why-do-we-care-about-memory">Why do we care about memory?</h3>
+<p>Because this is a simple way to test whether the reservoir has memory. If the current state of the oscillator network still contains information from a few seconds ago, then the reservoir can support tasks where recent context matters. For example, if a robot is moving through a room, its next action should not depend only on what it sees right now. It also helps to know what it was seeing and doing a moment ago, because that recent history tells the robot whether it is approaching an object, moving away from it, or turning around.</p>
+<p>Now let’s make the task harder: can the current reservoir state help predict future values of the input signal over a short horizon?</p>
+</section>
+</section>
+<section id="predicting-a-short-step-ahead" class="level2">
+<h2 class="anchored" data-anchor-id="predicting-a-short-step-ahead">Predicting a short step ahead</h2>
+<section id="why-do-we-care-about-predicting-the-future" class="level3">
+<h3 class="anchored" data-anchor-id="why-do-we-care-about-predicting-the-future">Why do we care about predicting the future?</h3>
+<p>Because that is a common real-world task. If we can use the current state of the reservoir to predict what will happen next, then we can use this capability for anticipating events and making decisions based on what is likely to come. For example, if we are controlling a robot and we know what is going to happen in the next few seconds, we can plan our actions better. Or if we are monitoring a system and we can predict a failure before it happens which will allow us to take preventive measures.</p>
+</section>
+<section id="how-can-we-predict-the-future" class="level3">
+<h3 class="anchored" data-anchor-id="how-can-we-predict-the-future">How can we predict the future?</h3>
+<p>This is a different task than reconstructing the past. I will first train the output model to predict the input signal 1 step ahead, which is about 20 milliseconds in this simulation. That means the output model will try to predict the input signal at the next time step, using only the current state of the oscillator network.</p>
+<div id="40d867c7" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Input reconstruction on the tuned reservoir states</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>washout <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>train_fraction <span class="op">=</span> <span class="fl">0.7</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>ridge_alpha <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>X_eval <span class="op">=</span> X[washout:]</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>u_eval <span class="op">=</span> input_trace[washout:]</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>u_eval <span class="op">=</span> u_eval[:, np.newaxis]</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Input reconstruction on the tuned reservoir states</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>future_steps <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Task: Future input prediction (steps = </span><span class="sc">{</span>future_steps<span class="sc">}</span><span class="ss">)"</span>)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>X_current <span class="op">=</span> X_eval[:<span class="op">-</span>future_steps]</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>u_target <span class="op">=</span> u_eval[future_steps:] <span class="cf">if</span> future_steps <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> u_eval</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>n_samples <span class="op">=</span> <span class="bu">len</span>(u_target)</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>train_size <span class="op">=</span> <span class="bu">int</span>(train_fraction <span class="op">*</span> n_samples)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>_, _, _, Wout <span class="op">=</span> __fit__(X_current, u_target, train_size, ridge_alpha)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre class="text"><code>Task: Future input prediction (steps = 1)
+R^2: 0.997/1.0</code></pre>
+<p>Now that I have a prediction output model, I will use these predicted input values to drive my oscillator network for a few seconds. The question is: how well does the reservoir’s internal state reflect the future input values that it is trying to predict? If the reservoir can capture the dynamics of the input signal, then the predicted future values should be reasonably close to the actual future values, and the internal states should show patterns that correspond to those predictions. Let’s see how it goes!</p>
+<div id="255de9df" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coupled_oscillators_pred(t, y, k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix, drive_value):</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="bu">len</span>(y) <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> y[:N]</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    v <span class="op">=</span> y[N:]</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    dxdt <span class="op">=</span> v</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    u <span class="op">=</span> drive_value</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    row_sums <span class="op">=</span> c_matrix.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    coupling_term <span class="op">=</span> c_matrix <span class="op">@</span> x <span class="op">-</span> row_sums <span class="op">*</span> x  <span class="co"># Efficient coupling term calculation</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    dvdt <span class="op">=</span> <span class="op">-</span>beta_matrix <span class="op">*</span> v <span class="op">-</span> omega_n<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> x <span class="op">+</span> coupling_term <span class="op">+</span> (F_matrix <span class="op">*</span> F0 <span class="op">*</span> u) <span class="op">/</span> m</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.concatenate([dxdt, dvdt])</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> readout_prediction(X_current, Wout):</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    X_current_aug <span class="op">=</span> np.append(X_current, <span class="dv">1</span>)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    y_pred <span class="op">=</span> Wout <span class="op">@</span> X_current_aug</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y_pred</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>y_current <span class="op">=</span> sol.y[:, washout <span class="op">+</span> future_steps <span class="op">+</span> train_size<span class="op">-</span><span class="dv">1</span>].T.copy()</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>x_current <span class="op">=</span> y_current[readout_nodes]</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>t_current <span class="op">=</span> sol.t[washout <span class="op">+</span> future_steps <span class="op">+</span> train_size<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>dt <span class="op">=</span> t_eval[<span class="dv">1</span>] <span class="op">-</span> t_eval[<span class="dv">0</span>]</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>input_pred_auto <span class="op">=</span> []</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>t_pred_auto <span class="op">=</span> []</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> step <span class="kw">in</span> <span class="bu">range</span>(test_time.shape[<span class="dv">0</span>]):</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Current displacement</span></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>    x_current <span class="op">=</span> y_current[readout_nodes]</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Predict future input</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>    y_pred <span class="op">=</span> readout_prediction(x_current, Wout)</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Store prediction</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>    input_pred_auto.append(y_pred)</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Integrate the coupled oscillators for one step using the predicted input</span></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>    sol_pred <span class="op">=</span> solve_ivp(</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>        coupled_oscillators_pred,</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>        (t_current, t_current <span class="op">+</span> dt),</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>        y_current,</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>        args<span class="op">=</span>(k_matrix, m, beta_matrix, F0, omega_d, F_matrix, c_matrix, y_pred),</span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>        t_eval<span class="op">=</span>[t_current <span class="op">+</span> dt],</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>        max_step<span class="op">=</span><span class="fl">0.05</span>,</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>        rtol<span class="op">=</span><span class="fl">1e-6</span>,</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>        atol<span class="op">=</span><span class="fl">1e-8</span>,</span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> sol_pred.success, sol_pred.message</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>    y_current <span class="op">=</span> sol_pred.y[:, <span class="op">-</span><span class="dv">1</span>]  <span class="co"># Update current state to the last predicted state</span></span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>    t_current <span class="op">+=</span> dt</span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>    t_pred_auto.append(t_current)</span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>input_true <span class="op">=</span> u_eval[train_size <span class="op">+</span> future_steps : train_size <span class="op">+</span> future_steps <span class="op">+</span> <span class="bu">len</span>(input_pred_auto)]</span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a>r2_auto <span class="op">=</span> r2_score(y_true<span class="op">=</span>np.array(input_true), y_pred<span class="op">=</span>np.array(input_pred_auto))</span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Future input prediction R^2: </span><span class="sc">{</span>r2_auto<span class="sc">:.3f}</span><span class="ss">/1.0"</span>)</span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a>ax.plot(t_pred_auto, input_true, label<span class="op">=</span><span class="ss">f"Future Input to the Oscillator"</span>, color<span class="op">=</span><span class="st">"black"</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a>ax.plot(t_pred_auto, input_pred_auto, label<span class="op">=</span><span class="st">"Real-time Prediction by the Oscillator Reservoir"</span>, color<span class="op">=</span><span class="st">"tab:orange"</span>)</span>
+<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Future Input prediction using Oscillator output"</span>)</span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Future Input"</span>)</span>
+<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Time (s)"</span>)</span>
+<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre class="text"><code>Future input prediction R^2: 0.940/1.0</code></pre>
+<p><img src="./notebook_outputs/cell-11-output-10.png" class="img-fluid"></p>
+<p>That’s it! We have a reservoir of coupled oscillators that can not only reconstruct past inputs but also predict future values of the input signal. This shows that the reservoir is not just a passive system; it is actively processing the information and retaining useful traces of the input history, as well as anticipating what is likely to come next. This kind of capability is what makes physical reservoirs so powerful for tasks that involve temporal dynamics and sequence processing.</p>
+</section>
+</section>
+<section id="what-this-toy-reservoir-can-do" class="level2">
+<h2 class="anchored" data-anchor-id="what-this-toy-reservoir-can-do">What this toy reservoir can do</h2>
+<p>At this point, we have seen the main idea in miniature. In this toy simulation, a simple output model can reconstruct delayed inputs and make short-horizon predictions using the current oscillator states, for this particular signal.</p>
+<p>That is the reservoir-computing idea: we do not micromanage the whole physical system for our purposes. Instead, we let its dynamics create a rich set of changing states, then obtain a simple mapping to interpret those states.</p>
+<p>Why care about that? Because many real problems involve signals that unfold over time: noisy sensors, repeated patterns, machine vibrations, biological rhythms, and so on. A reservoir does not magically solve those problems by itself, but it can provide useful time-dependent features for a mapping. Physical reservoir computing is interesting because, for some specialized tasks, the physics may do part of the signal transformation that a digital system would otherwise have to simulate.</p>
+<p>But all of this comes with a caveat: not all oscillator networks will work equally well for every input signal or task. The choice of parameters, the number of oscillators, the coupling strengths, and the nature of the input signal all play a role in determining how effective the reservoir will be.</p>
+<p>Our current oscillator network does really well at reconstruction and prediction for this particular input signal. But these two tasks are not the whole story. A useful reservoir should also be able to transform the input in ways that are helpful for other tasks. So let’s give this reservoir one more challenge. Can it help compute a nonlinear function of the input signal?</p>
+</section>
+<section id="a-final-check-nonlinear-computation" class="level2">
+<h2 class="anchored" data-anchor-id="a-final-check-nonlinear-computation">A final check: nonlinear computation</h2>
+<p>Why care about nonlinear computation? Because many real-world problems involve nonlinear relationships between inputs and outputs. For example, when a robot has to brake, if it is moving <strong>twice as fast</strong>, it needs to brake <strong>more than twice as hard</strong>. The relationship between speed and braking force is nonlinear. Hence, if a reservoir can help compute a nonlinear function of the input signal, it can be useful for a wider range of applications where there are complex relationships between the inputs and the desired outputs.</p>
+<section id="so-how-do-we-test-nonlinear-computation" class="level3">
+<h3 class="anchored" data-anchor-id="so-how-do-we-test-nonlinear-computation">So how do we test nonlinear computation?</h3>
+<p>Like the memory task, we collect the oscillator states over time. But here, instead of having our target as a delayed input signal, we use the nonlinear transformation of the current input signal as the target. In this case, the nonlinear transformation that we will use are:</p>
+<ol type="1">
+<li>The square of the input signal: <span class="math inline">\(y(t) = [f(t)]^2\)</span></li>
+<li>The cube of the input signal: <span class="math inline">\(y(t) = [f(t)]^3\)</span></li>
+<li>A combination of the nonlinear transformations: <span class="math inline">\(y(t) = \sqrt{2}f(t) + [f(t)]^2 + 5[f(t)]^3\)</span></li>
+</ol>
+<div id="9772ef8b" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>train_fraction <span class="op">=</span> <span class="fl">0.7</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>ridge_alpha <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Square of the input signal</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>u_target_1 <span class="op">=</span> u_eval<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Cube of the input signal</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>u_target_2 <span class="op">=</span> u_eval<span class="op">**</span><span class="dv">3</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Sum of nonlinear functions of the input signal</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>u_target_sum <span class="op">=</span> np.sqrt(<span class="dv">2</span>) <span class="op">*</span> u_eval <span class="op">+</span> u_eval<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">5</span><span class="op">*</span>u_eval<span class="op">**</span><span class="dv">3</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>n_samples_1 <span class="op">=</span> <span class="bu">len</span>(u_target_1)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>n_samples_2 <span class="op">=</span> <span class="bu">len</span>(u_target_2)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>n_samples_sum <span class="op">=</span> <span class="bu">len</span>(u_target_sum)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>train_size_1 <span class="op">=</span> <span class="bu">int</span>(train_fraction <span class="op">*</span> n_samples_1)</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>train_size_2 <span class="op">=</span> <span class="bu">int</span>(train_fraction <span class="op">*</span> n_samples_2)</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>train_size_sum <span class="op">=</span> <span class="bu">int</span>(train_fraction <span class="op">*</span> n_samples_sum)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>y_test_1, y_pred_1, score_1, _ <span class="op">=</span> __fit__(X_eval, u_target_1, train_size_1, ridge_alpha)</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>y_test_2, y_pred_2, score_2, _ <span class="op">=</span> __fit__(X_eval, u_target_2, train_size_2, ridge_alpha)</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>y_test_sum, y_pred_sum, score_sum, _ <span class="op">=</span> __fit__(X_eval, u_target_sum, train_size_sum, ridge_alpha)</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">3</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">15</span>))</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].plot(sol.t[washout <span class="op">+</span> train_size_1 : washout <span class="op">+</span> n_samples_1], y_test_1.T, label<span class="op">=</span><span class="st">"Target: Input^2"</span>, color<span class="op">=</span><span class="st">"black"</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].plot(sol.t[washout <span class="op">+</span> train_size_1 : washout <span class="op">+</span> n_samples_1], y_pred_1.T, label<span class="op">=</span><span class="st">"Reconstruction"</span>, color<span class="op">=</span><span class="st">"tab:orange"</span>)</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_title(<span class="ss">f"Reconstruction of Input^2 $[f(t)^2]$ (R^2: </span><span class="sc">{</span>score_1<span class="sc">:.3f}</span><span class="ss">)"</span>)</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_ylabel(<span class="st">"Square of Input $[f(t)^2]$"</span>)</span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_xlabel(<span class="st">"Time (s)"</span>)</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].legend()</span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].plot(sol.t[washout <span class="op">+</span> train_size_2 : washout <span class="op">+</span> n_samples_2], y_test_2.T, label<span class="op">=</span><span class="st">"Target: Input^3"</span>, color<span class="op">=</span><span class="st">"black"</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].plot(sol.t[washout <span class="op">+</span> train_size_2 : washout <span class="op">+</span> n_samples_2], y_pred_2.T, label<span class="op">=</span><span class="st">"Reconstruction"</span>, color<span class="op">=</span><span class="st">"tab:orange"</span>)</span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="ss">f"Reconstruction of Input^3 $[f(t)^3]$ (R^2: </span><span class="sc">{</span>score_2<span class="sc">:.3f}</span><span class="ss">)"</span>)</span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_ylabel(<span class="st">"Cube of Input $[f(t)^3]$"</span>)</span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_xlabel(<span class="st">"Time (s)"</span>)</span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].legend()</span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].plot(sol.t[washout <span class="op">+</span> train_size_sum : washout <span class="op">+</span> n_samples_sum], y_test_sum.T, label<span class="op">=</span><span class="st">"Target: sqrt(2)*Input + Input^2 + 5*Input^3"</span>, color<span class="op">=</span><span class="st">"black"</span>, linewidth<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].plot(sol.t[washout <span class="op">+</span> train_size_sum : washout <span class="op">+</span> n_samples_sum], y_pred_sum.T, label<span class="op">=</span><span class="st">"Reconstruction"</span>, color<span class="op">=</span><span class="st">"tab:orange"</span>)</span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].set_title(<span class="ss">f"Reconstruction of Nonlinear function of Input (R^2: </span><span class="sc">{</span>score_sum<span class="sc">:.3f}</span><span class="ss">)"</span>)</span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].set_ylabel(<span class="st">"$[</span><span class="ch">\\</span><span class="st">sqrt</span><span class="sc">{2}</span><span class="st">f(t) + f(t)^2 + 5f(t)^3]$"</span>)</span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].set_xlabel(<span class="st">"Time (s)"</span>)</span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].legend()</span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<pre class="text"><code>R^2: -0.003/1.0
+R^2: 0.765/1.0
+R^2: 0.792/1.0</code></pre>
+<p><img src="./notebook_outputs/cell-12-output-11.png" class="img-fluid"></p>
+<p>Here is the catch: this system struggles with nonlinear computations. It can approximate the cube of the input signal, and even the nonlinear combination, to some extent. But we should be careful about what that means. Those target signals swing above and below zero, just like the original input signal. So the system is not being asked to do something completely different in shape. The square of the input is a harder test. Unlike the original signal, it is always positive.</p>
+<p>And these results are not too surprising once we look back at the model. This spring-mass system is linear: if the displacement doubles, the spring force doubles too. That makes it easier to understand, but it also limits the kinds of transformations it can provide.</p>
+<p>If we want stronger nonlinear computation, we need to put some nonlinearity into the system itself, such as nonlinear springs or nonlinear damping. Oscillators with nonlinear spring behavior are often modeled as <strong>Duffing oscillators</strong>. They can be more expressive than linear oscillators, but they are also harder to analyze and control.</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>Let’s summarize what we did in this experiment. We started with one oscillator, connected many oscillators together, and used their collective motion as a simple reservoir. For this toy setup, the reservoir states were useful for reconstructing the input, retaining delayed information, and making short-horizon predictions.</p>
+<p>But the final nonlinear test also gave us an important warning: a purely linear oscillator reservoir cannot provide every kind of computation we might want. That limitation is not a dead end. It points directly to the next step: introduce nonlinearity and see how it changes the reservoir’s computational behavior.</p>
+<p>And that’s exactly what we will do in the next experiment. We will take this same setup and add nonlinear springs to see how that changes the reservoir’s ability to compute nonlinear functions of the input signal. Stay tuned!</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const normalizeArticleUrl = (href) => {
+    if (!href || href.includes("#")) {
+      return null;
+    }
+
+    const url = new URL(href, window.location.href);
+    if (!/\/modules\/dynamics_that_compute\/\d+_[^/]+\/(?:index\.html)?$/.test(url.pathname)) {
+      return null;
+    }
+
+    return url.pathname.replace(/index\.html$/, "").replace(/\/$/, "");
+  };
+
+  const articleLinks = Array.from(document.querySelectorAll("#quarto-sidebar a.sidebar-link[href]"));
+  const seen = new Set();
+  const articles = [];
+
+  articleLinks.forEach((link) => {
+    const key = normalizeArticleUrl(link.getAttribute("href"));
+    if (!key || seen.has(key)) {
+      return;
+    }
+
+    seen.add(key);
+    articles.push({
+      key,
+      href: link.href,
+      text: link.textContent.trim()
+    });
+  });
+
+  const currentKey = window.location.pathname.replace(/index\.html$/, "").replace(/\/$/, "");
+  const currentIndex = articles.findIndex((article) => article.key === currentKey);
+  if (currentIndex === -1) {
+    return;
+  }
+
+  const setNavLink = (selector, article, direction) => {
+    const container = document.querySelector(selector);
+    if (!container) {
+      return;
+    }
+
+    if (!article) {
+      container.innerHTML = "";
+      return;
+    }
+
+    const icon = direction === "previous"
+      ? '<i class="bi bi-arrow-left-short"></i> '
+      : ' <i class="bi bi-arrow-right-short"></i>';
+    const text = article.text.replace(/[<>&"]/g, (char) => ({
+      "<": "&lt;",
+      ">": "&gt;",
+      "&": "&amp;",
+      '"': "&quot;"
+    })[char]);
+
+    container.innerHTML = direction === "previous"
+      ? `<a href="${article.href}" class="pagination-link" aria-label="${text}">${icon}<span class="nav-page-text">${text}</span></a>`
+      : `<a href="${article.href}" class="pagination-link" aria-label="${text}"><span class="nav-page-text">${text}</span>${icon}</a>`;
+  };
+
+  setNavLink(".nav-page-previous", articles[currentIndex - 1], "previous");
+  setNavLink(".nav-page-next", articles[currentIndex + 1], "next");
+
+  document.querySelectorAll("#quarto-sidebar .sidebar-item-section").forEach((section) => {
+    const sectionLink = section.querySelector(":scope > .sidebar-item-container > a.sidebar-link[href]");
+    const sectionUrl = normalizeArticleUrl(sectionLink?.getAttribute("href"));
+    if (!sectionUrl) {
+      return;
+    }
+
+    const nested = section.querySelector(":scope > ul.sidebar-section");
+    const toggle = section.querySelector(".sidebar-item-toggle");
+    const label = section.querySelector(".sidebar-item-text");
+    nested?.classList.remove("show");
+    toggle?.classList.add("collapsed");
+    toggle?.setAttribute("aria-expanded", "false");
+    label?.setAttribute("aria-expanded", "false");
+  });
+});
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -771,8 +1759,8 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../../modules/dynamics_that_compute/index.html" class="pagination-link" aria-label="Overview">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Overview</span>
+      <a href="../../../modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html" class="pagination-link" aria-label="What is Reservoir Computing?">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">What is Reservoir Computing?</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

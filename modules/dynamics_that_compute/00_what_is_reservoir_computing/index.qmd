@@ -1,5 +1,12 @@
 ---
 title: "What is Reservoir Computing?"
+description: "An approachable introduction to reservoir computing, readouts, memory, and why dynamical systems can be useful for processing sequences."
+categories:
+  - reservoir computing
+  - dynamics
+  - explainer
+toc: true
+page-layout: article
 ---
 
 Imagine you have a pool of water and you throw a stone into it. The stone creates ripples. If you throw another stone before 

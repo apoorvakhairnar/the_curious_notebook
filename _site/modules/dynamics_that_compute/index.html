@@ -33,7 +33,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html" rel="next">
+<link href="../../modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html" rel="next">
 <script src="../../site_libs/quarto-listing/list.min.js"></script>
 <script src="../../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
@@ -368,12 +368,18 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Examples</span></a>
+ <span class="menu-text">Experiments</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">What is Reservoir Computing?</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html" class="sidebar-item-text sidebar-link">
@@ -438,7 +444,7 @@ A material stores and releases energy.</p>
 <h2 class="anchored" data-anchor-id="current-entries">Current entries</h2>
 <div id="listing-entries" class="quarto-listing quarto-listing-container-grid">
 <div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-listing-file-modified-sort="1780799800584" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
+<div class="g-col-1" data-index="0" data-categories="ZHluYW1pY3MlMkNyZXNlcnZvaXIlMjBjb21wdXRpbmclMkNvc2NpbGxhdG9ycyUyQ3NpbXVsYXRpb24=" data-listing-file-modified-sort="1781733435757" data-listing-reading-time-sort="28" data-listing-word-count-sort="5466">
 <a href="../../modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -446,12 +452,12 @@ A material stores and releases energy.</p>
 Coupled Oscillator Reservoir
 </h5>
 <div class="card-text listing-description delink">
-
+<p>A notebook-derived article exploring oscillator dynamics and coupled oscillators as a possible reservoir-computing toy model.</p>
 </div>
 </div>
 </div></a>
 </div>
-<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1780802006281" data-listing-reading-time-sort="4" data-listing-word-count-sort="679">
+<div class="g-col-1" data-index="1" data-categories="cmVzZXJ2b2lyJTIwY29tcHV0aW5nJTJDZHluYW1pY3MlMkNleHBsYWluZXI=" data-listing-file-modified-sort="1781730126177" data-listing-reading-time-sort="4" data-listing-word-count-sort="671">
 <a href="../../modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -459,7 +465,7 @@ Coupled Oscillator Reservoir
 What is Reservoir Computing?
 </h5>
 <div class="card-text listing-description delink">
-<p>A general-audience introduction to reservoir computing, from ripples in water to fixed recurrent systems and trained readouts.</p>
+<p>An approachable introduction to reservoir computing, readouts, memory, and why dynamical systems can be useful for processing sequences.</p>
 </div>
 </div>
 </div></a>
@@ -485,6 +491,91 @@ What is Reservoir Computing?
 </section>
 
 </main> <!-- /main -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const normalizeArticleUrl = (href) => {
+    if (!href || href.includes("#")) {
+      return null;
+    }
+
+    const url = new URL(href, window.location.href);
+    if (!/\/modules\/dynamics_that_compute\/\d+_[^/]+\/(?:index\.html)?$/.test(url.pathname)) {
+      return null;
+    }
+
+    return url.pathname.replace(/index\.html$/, "").replace(/\/$/, "");
+  };
+
+  const articleLinks = Array.from(document.querySelectorAll("#quarto-sidebar a.sidebar-link[href]"));
+  const seen = new Set();
+  const articles = [];
+
+  articleLinks.forEach((link) => {
+    const key = normalizeArticleUrl(link.getAttribute("href"));
+    if (!key || seen.has(key)) {
+      return;
+    }
+
+    seen.add(key);
+    articles.push({
+      key,
+      href: link.href,
+      text: link.textContent.trim()
+    });
+  });
+
+  const currentKey = window.location.pathname.replace(/index\.html$/, "").replace(/\/$/, "");
+  const currentIndex = articles.findIndex((article) => article.key === currentKey);
+  if (currentIndex === -1) {
+    return;
+  }
+
+  const setNavLink = (selector, article, direction) => {
+    const container = document.querySelector(selector);
+    if (!container) {
+      return;
+    }
+
+    if (!article) {
+      container.innerHTML = "";
+      return;
+    }
+
+    const icon = direction === "previous"
+      ? '<i class="bi bi-arrow-left-short"></i> '
+      : ' <i class="bi bi-arrow-right-short"></i>';
+    const text = article.text.replace(/[<>&"]/g, (char) => ({
+      "<": "&lt;",
+      ">": "&gt;",
+      "&": "&amp;",
+      '"': "&quot;"
+    })[char]);
+
+    container.innerHTML = direction === "previous"
+      ? `<a href="${article.href}" class="pagination-link" aria-label="${text}">${icon}<span class="nav-page-text">${text}</span></a>`
+      : `<a href="${article.href}" class="pagination-link" aria-label="${text}"><span class="nav-page-text">${text}</span>${icon}</a>`;
+  };
+
+  setNavLink(".nav-page-previous", articles[currentIndex - 1], "previous");
+  setNavLink(".nav-page-next", articles[currentIndex + 1], "next");
+
+  document.querySelectorAll("#quarto-sidebar .sidebar-item-section").forEach((section) => {
+    const sectionLink = section.querySelector(":scope > .sidebar-item-container > a.sidebar-link[href]");
+    const sectionUrl = normalizeArticleUrl(sectionLink?.getAttribute("href"));
+    if (!sectionUrl) {
+      return;
+    }
+
+    const nested = section.querySelector(":scope > ul.sidebar-section");
+    const toggle = section.querySelector(".sidebar-item-toggle");
+    const label = section.querySelector(".sidebar-item-text");
+    nested?.classList.remove("show");
+    toggle?.classList.add("collapsed");
+    toggle?.setAttribute("aria-expanded", "false");
+    label?.setAttribute("aria-expanded", "false");
+  });
+});
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -902,8 +993,8 @@ What is Reservoir Computing?
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.html" class="pagination-link" aria-label="Coupled Oscillator Reservoir">
-        <span class="nav-page-text">Coupled Oscillator Reservoir</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../modules/dynamics_that_compute/00_what_is_reservoir_computing/index.html" class="pagination-link" aria-label="What is Reservoir Computing?">
+        <span class="nav-page-text">What is Reservoir Computing?</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

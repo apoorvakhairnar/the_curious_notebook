@@ -1,4 +1,4 @@
-/.quarto/
+
 **/*.quarto_ipynb
 .codex/config.toml
 .codex/agents/physical-system-specifier.toml

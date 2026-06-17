@@ -4,12 +4,10 @@ project:
   render:
     - "index.qmd"
     - "about.qmd"
-    - "modules/index.qmd"
-    - "modules/dynamics_that_compute/*.qmd"
-    - "modules/dynamics_that_compute/**/*.qmd"
-    - "modules/dynamics_that_compute/**/*.ipynb"
-    - "posts/*.qmd"
+    - "modules/**/*.qmd"
+    - "glossary/**/*.qmd"
     - "posts/**/*.qmd"
+    - "resources/**/*.qmd"
 
 website:
   title: "The Curious Notebook"
@@ -32,13 +30,13 @@ website:
 
   sidebar:
     - title: "Dynamics That Compute"
+      collapse-level: 0
       contents:
         - text: "Overview"
           href: modules/dynamics_that_compute/index.qmd
-        - section: "Examples"
+        - section: "Experiments"
           contents:
-            - text: "Coupled Oscillator Reservoir"
-              href: modules/dynamics_that_compute/01_coupled_oscillator_reservoir/index.qmd
+            - auto: "modules/dynamics_that_compute/*/index.qmd"
 
 format:
   html:
@@ -46,6 +44,7 @@ format:
       light: cosmo
       dark: darkly
     css: styles.css
+    include-after-body: _includes/article-navigation.html
     toc: true
     code-copy: true
     code-overflow: wrap

@@ -336,6 +336,91 @@ ul.task-list li input[type="checkbox"] {
 
 
 </main> <!-- /main -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const normalizeArticleUrl = (href) => {
+    if (!href || href.includes("#")) {
+      return null;
+    }
+
+    const url = new URL(href, window.location.href);
+    if (!/\/modules\/dynamics_that_compute\/\d+_[^/]+\/(?:index\.html)?$/.test(url.pathname)) {
+      return null;
+    }
+
+    return url.pathname.replace(/index\.html$/, "").replace(/\/$/, "");
+  };
+
+  const articleLinks = Array.from(document.querySelectorAll("#quarto-sidebar a.sidebar-link[href]"));
+  const seen = new Set();
+  const articles = [];
+
+  articleLinks.forEach((link) => {
+    const key = normalizeArticleUrl(link.getAttribute("href"));
+    if (!key || seen.has(key)) {
+      return;
+    }
+
+    seen.add(key);
+    articles.push({
+      key,
+      href: link.href,
+      text: link.textContent.trim()
+    });
+  });
+
+  const currentKey = window.location.pathname.replace(/index\.html$/, "").replace(/\/$/, "");
+  const currentIndex = articles.findIndex((article) => article.key === currentKey);
+  if (currentIndex === -1) {
+    return;
+  }
+
+  const setNavLink = (selector, article, direction) => {
+    const container = document.querySelector(selector);
+    if (!container) {
+      return;
+    }
+
+    if (!article) {
+      container.innerHTML = "";
+      return;
+    }
+
+    const icon = direction === "previous"
+      ? '<i class="bi bi-arrow-left-short"></i> '
+      : ' <i class="bi bi-arrow-right-short"></i>';
+    const text = article.text.replace(/[<>&"]/g, (char) => ({
+      "<": "&lt;",
+      ">": "&gt;",
+      "&": "&amp;",
+      '"': "&quot;"
+    })[char]);
+
+    container.innerHTML = direction === "previous"
+      ? `<a href="${article.href}" class="pagination-link" aria-label="${text}">${icon}<span class="nav-page-text">${text}</span></a>`
+      : `<a href="${article.href}" class="pagination-link" aria-label="${text}"><span class="nav-page-text">${text}</span>${icon}</a>`;
+  };
+
+  setNavLink(".nav-page-previous", articles[currentIndex - 1], "previous");
+  setNavLink(".nav-page-next", articles[currentIndex + 1], "next");
+
+  document.querySelectorAll("#quarto-sidebar .sidebar-item-section").forEach((section) => {
+    const sectionLink = section.querySelector(":scope > .sidebar-item-container > a.sidebar-link[href]");
+    const sectionUrl = normalizeArticleUrl(sectionLink?.getAttribute("href"));
+    if (!sectionUrl) {
+      return;
+    }
+
+    const nested = section.querySelector(":scope > ul.sidebar-section");
+    const toggle = section.querySelector(".sidebar-item-toggle");
+    const label = section.querySelector(".sidebar-item-text");
+    nested?.classList.remove("show");
+    toggle?.classList.add("collapsed");
+    toggle?.setAttribute("aria-expanded", "false");
+    label?.setAttribute("aria-expanded", "false");
+  });
+});
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

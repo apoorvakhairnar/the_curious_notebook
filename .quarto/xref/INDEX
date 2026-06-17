@@ -19,5 +19,17 @@
   },
   "posts/index.qmd": {
     "index.html": "c4d2f968"
+  },
+  "modules/dynamics_that_compute/01_coupled_oscillator_reservoir/notebook.ipynb": {
+    "notebook.html": "226e133c"
+  },
+  "glossary/index.qmd": {
+    "index.html": "f1291a1d"
+  },
+  "resources/references.qmd": {
+    "references.html": "1d016679"
+  },
+  "resources/tools.qmd": {
+    "tools.html": "c9fefc00"
   }
 }
